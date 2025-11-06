@@ -27,7 +27,7 @@ Our platform ensures **data security, token fairness, and fraud prevention** usi
 
 ## 🏗️ System Architecture
 
-```mermaid
+
 graph TD
     subgraph Client-Side (React Frontend)
         A1[Auth Pages<br/>(Login, Register)]
