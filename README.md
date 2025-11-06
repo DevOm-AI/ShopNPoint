@@ -30,7 +30,8 @@ Our platform ensures **data security, token fairness, and fraud prevention** usi
  "Will be uploaded soon...!"
 
 
- Machine Learning Module
+---
+## 🧠 Machine Learning Module
 
 Language: Python
 Framework: Flask API
