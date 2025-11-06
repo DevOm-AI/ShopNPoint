@@ -76,7 +76,7 @@ graph TD
 
 
 
-🧠 Machine Learning Module
+ Machine Learning Module
 
 Language: Python
 Framework: Flask API
