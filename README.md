@@ -29,31 +29,47 @@ Our platform ensures **data security, token fairness, and fraud prevention** usi
 
 ```mermaid
 graph TD
-    subgraph Client-Side (React Frontend)
-        A1[Auth Pages<br/>(Login, Register)]
-        A2[Shop Pages<br/>(Home, Category, Product Detail)]
-        A3[Dashboard<br/>(Profile, Tokens, Orders)]
-        A4[Cart & Checkout]
+    subgraph Client_Side["Client-Side: React Frontend"]
+        A1["Auth Pages - Login, Register"]
+        A2["Shop Pages - Home, Category, Product Detail"]
+        A3["Dashboard - Profile, Tokens, Orders"]
+        A4["Cart & Checkout"]
     end
 
-    subgraph Server-Side (Node.js API)
-        B1[API Gateway]
-        B2[Auth Service]
-        B3[Product Service]
-        B4[Order Service]
-        B5[Reward Service]
+    subgraph Server_Side["Server-Side: Node.js API"]
+        B1["API Gateway"]
+        B2["Auth Service"]
+        B3["Product Service"]
+        B4["Order Service"]
+        B5["Reward Service"]
     end
 
-    subgraph Data & External Services
-        C1[(MySQL DB)]
-        C2[ML Service<br/>(Flask, Python)]
-        C3[Payment Gateway]
+    subgraph Data_Services["Data & External Services"]
+        C1["MySQL Database"]
+        C2["ML Service - Flask, Python"]
+        C3["Payment Gateway"]
     end
 
-    User[👤 User] --> A1 & A2 & A3 & A4
-    A1 & A2 & A3 & A4 --> B1
-    B1 --> B2 & B3 & B4 & B5
-    B2 & B3 & B4 & B5 --> C1
+    User["👤 User"] --> A1
+    User --> A2
+    User --> A3
+    User --> A4
+
+    A1 --> B1
+    A2 --> B1
+    A3 --> B1
+    A4 --> B1
+
+    B1 --> B2
+    B1 --> B3
+    B1 --> B4
+    B1 --> B5
+
+    B2 --> C1
+    B3 --> C1
+    B4 --> C1
+    B5 --> C1
+
     B5 --> C2
     B4 --> C3
 
