@@ -27,7 +27,7 @@ Our platform ensures **data security, token fairness, and fraud prevention** usi
 
 ## 🏗️ System Architecture
 
-
+```mermaid
 graph TD
     subgraph Client-Side (React Frontend)
         A1[Auth Pages<br/>(Login, Register)]
@@ -50,7 +50,7 @@ graph TD
         C3[Payment Gateway]
     end
 
-    User[🧍 User] --> A1 & A2 & A3 & A4
+    User[👤 User] --> A1 & A2 & A3 & A4
     A1 & A2 & A3 & A4 --> B1
     B1 --> B2 & B3 & B4 & B5
     B2 & B3 & B4 & B5 --> C1
