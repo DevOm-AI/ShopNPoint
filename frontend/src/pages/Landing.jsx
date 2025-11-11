@@ -11,12 +11,7 @@ import {
 import Logo from '../components/Logo';
 import Header from '../components/Header'; 
 
-// --- We will define these components locally ---
-// import CategoryCard from '../components/CategoryCard';
-// import ProductCard from '../components/ProductCard';
 
-
-// --- NEW: CategoryCard Component (Styled to match design system) ---
 const CategoryCard = ({ category }) => {
   const { name, icon: Icon, itemCount } = category;
   return (
