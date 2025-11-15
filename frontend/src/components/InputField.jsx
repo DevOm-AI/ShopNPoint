@@ -12,6 +12,7 @@ const InputField = ({
   onBlur,
   placeholder,
   disabled,
+  readOnly,
   showPasswordToggle,
   showPassword,
   setShowPassword,
@@ -36,7 +37,7 @@ const InputField = ({
         }`}>
           <Icon className="w-5 h-5" />
         </div>
-        
+
         <input
           type={showPasswordToggle && !showPassword ? 'password' : type}
           name={name}
@@ -45,10 +46,10 @@ const InputField = ({
           onFocus={() => onFocus && onFocus(name)}
           onBlur={() => onBlur && onBlur()}
           placeholder={placeholder}
-          disabled={disabled}
-          className={`w-full pl-12 py-5 bg-transparent border-0 outline-none text-gray-800 placeholder-gray-400 text-lg relative z-10 ${
-            showPasswordToggle ? 'pr-12' : 'pr-4'
-          }`}
+          className={`w-full pl-12 py-5 bg-transparent border-0 outline-none text-gray-800 placeholder-gray-400 text-lg relative z-10 
+            ${showPasswordToggle ? 'pr-12' : 'pr-4'}
+            ${disabled ? 'text-gray-700 cursor-not-allowed' : ''}
+          `}
         />
         
         {showPasswordToggle && (

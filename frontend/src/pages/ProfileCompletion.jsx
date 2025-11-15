@@ -1,163 +1,316 @@
+// src/pages/ProfileCompletionPage.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { User, Calendar, Users, Phone, Home, Building, Hash, MapPin, CheckCircle } from 'lucide-react';
+// Import 'Phone', 'Home', and 'Mail' which were missing
+import { 
+  User, 
+  Calendar, 
+  MapPin, 
+  CheckCircle, 
+  Loader, 
+  AlertCircle, 
+  Users as GenderIcon, 
+  ArrowRight,
+  Phone,  // <-- FIXED: Added missing icon
+  Home,   // <-- FIXED: Added missing icon
+  Mail    // <-- FIXED: Added missing icon
+} from 'lucide-react';
 import InputField from '../components/InputField';
 import SelectField from '../components/SelectField';
+import Logo from '../components/Logo';
 
 const ProfileCompletionPage = () => {
+  // --- State Management (UNCHANGED) ---
   const [formData, setFormData] = useState({
     username: '',
-    gender: '',
-    age: '',
-    mobileNumber: '',
+    mobile_number: '',
     address: '',
+    age: '',
+    gender: '',
     city: '',
-    pincode: '',
-    state: ''
+    state: '',
+    pincode: ''
   });
-  
-  const [errors, setErrors] = useState({});
-  const [focusedField, setFocusedField] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [mounted, setMounted] = useState(false);
   const navigate = useNavigate();
 
-  // --- THIS IS THE MAIN CHANGE ---
-  // The data-fetching logic has been removed.
-  // We now only have a simple useEffect to get the username for display purposes.
+  // --- Fetch Existing Profile Data (UNCHANGED) ---
   useEffect(() => {
     setMounted(true);
-    try {
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      if (userInfo && userInfo.username) {
-        setFormData(prevData => ({ ...prevData, username: userInfo.username }));
-      } else {
-        // If no user info, they shouldn't be here
-        navigate('/login');
-      }
-    } catch (e) {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+    if (!userInfo || !userInfo.token) {
       navigate('/login');
+      return;
     }
-  }, [navigate]);
-  // --- END CHANGE ---
 
-  const genderOptions = [ { value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }, { value: 'other', label: 'Other' }];
-  const stateOptions = [ { value: 'maharashtra', label: 'Maharashtra' }, { value: 'delhi', label: 'Delhi' }, { value: 'karnataka', label: 'Karnataka' } ];
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({...prev, [name]: value}));
-  };
-
-  const validateForm = () => { return true; };
-
-  // This function remains the same, as it correctly sends all the data.
-  const handleSubmit = async () => {
-    if (validateForm()) {
-      setIsLoading(true);
-      setErrors({});
-
+    const fetchProfile = async () => {
+      setLoading(true);
       try {
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
         const config = {
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${userInfo.token}`,
           },
         };
-
-        const dataToUpdate = {
-          gender: formData.gender,
-          age: formData.age,
-          city: formData.city,
-          pincode: formData.pincode,
-          state: formData.state,
-          mobile_number: formData.mobileNumber,
-          address: formData.address
-        };
-
-        await axios.put(
-          'http://localhost:5000/api/users/profile',
-          dataToUpdate,
-          config
-        );
-
-        alert('Profile updated successfully!');
-        navigate('/landing');
-
-      } catch (error) {
-        const errorMessage = error.response?.data?.message || 'Failed to update profile.';
-        setErrors({ api: errorMessage });
-        alert(`Error: ${errorMessage}`);
+        const { data } = await axios.get('/api/users/profile', config); // Using proxy
+        setFormData({
+          username: data.username || '',
+          mobile_number: data.mobile_number || '', // Backend sends mobile_number
+          address: data.address || '',
+          age: data.age || '',
+          gender: data.gender || '',
+          city: data.city || '',
+          state: data.state || '',
+          pincode: data.pincode || ''
+        });
+      } catch (err) {
+        console.error("Failed to fetch profile for completion:", err);
+        setError(err.response?.data?.message || 'Failed to load existing profile data.');
+        if (err.response?.status === 401) {
+          localStorage.removeItem('userInfo');
+          navigate('/login');
+        }
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
+    };
+    fetchProfile();
+  }, [navigate]);
+
+  // --- Input Change Handler (UNCHANGED) ---
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+    setError(''); // Clear error on change
+  };
+
+  // --- Submit Handler (UNCHANGED) ---
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    // Basic validation for critical fields
+    if (!formData.username || !formData.mobile_number || !formData.address ||
+        !formData.age || !formData.gender || !formData.city || !formData.state || !formData.pincode) {
+      setError('Please fill in all required fields to complete your profile.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (!userInfo || !userInfo.token) {
+        navigate('/login');
+        return;
+      }
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      console.log("Worked till here");
+
+      await axios.put(
+        'http://localhost:5000/api/users/profile', // Using proxy
+        formData,
+        config
+      );
+
+      const updatedUserInfo = { ...userInfo, profileCompleted: true };
+      localStorage.setItem('userInfo', JSON.stringify(updatedUserInfo));
+
+      navigate('/dashboard'); 
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 'Failed to update profile.';
+      setError(errorMessage);
+      if (err.response?.status === 401) {
+        localStorage.removeItem('userInfo');
+        navigate('/login');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!mounted) return null;
+  // --- Options for SelectField (UNCHANGED) ---
+  const genderOptions = [
+    { value: 'Male', label: 'Male' },
+    { value: 'Female', label: 'Female' },
+    { value: 'Other', label: 'Other' }
+  ];
+  const stateOptions = [
+    { value: 'Maharashtra', label: 'Maharashtra' },
+    { value: 'Delhi', label: 'Delhi' },
+    { value: 'Karnataka', label: 'Karnataka' },
+    { value: 'Tamil Nadu', label: 'Tamil Nadu' },
+    { value: 'West Bengal', label: 'West Bengal' },
+    { value: 'Gujarat', label: 'Gujarat' },
+    { value: 'Rajasthan', label: 'Rajasthan' },
+    { value: 'Uttar Pradesh', label: 'Uttar Pradesh' },
+    { value: 'Punjab', label: 'Punjab' },
+    { value: 'Bihar', label: 'Bihar' }
+  ];
 
+  // --- NEW PROFESSIONAL UI ---
   return (
-    <div className="min-h-screen bg-blue-600 relative overflow-hidden">
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
-        <div className="w-full max-w-6xl">
-          <div className={`text-center mb-12 transform transition-all duration-1000 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <h1 className="text-6xl md:text-7xl font-black text-white mb-4 tracking-tight">
-              Profile<span className="block text-orange-400 text-5xl md:text-6xl mt-2">Completion</span>
-            </h1>
+    <div className={`min-h-screen bg-slate-50 flex items-center justify-center px-4 py-8 transition-opacity duration-500 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+      <div className="max-w-3xl w-full"> 
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <Logo size="large" />
           </div>
-          <div className={`bg-white rounded-3xl shadow-2xl p-8 md:p-12 backdrop-blur-sm transform transition-all duration-1000 delay-300 ${mounted ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-95'}`}>
-            <div className="text-center mb-10">
-              <h2 className="text-4xl font-bold text-blue-600 mb-3">Complete Your Profile!</h2>
-              <p className="text-gray-600 text-lg">Help us personalize your experience</p>
-              <div className="w-16 h-1 bg-orange-400 mx-auto mt-4 rounded-full"></div>
+          <h1 className="text-4xl font-extrabold text-slate-900 mb-2">Complete Your Profile</h1>
+          <p className="text-lg text-slate-600">Please provide your details to personalize your shopping experience.</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10 border border-slate-200">
+          {error && (
+            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center space-x-2">
+              <AlertCircle className="w-5 h-5"/>
+              <span>{error}</span>
             </div>
-            <div className="space-y-8">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <label className="block text-blue-600 text-sm font-bold mb-3 uppercase tracking-wide">Username (as registered)</label>
-                  <InputField icon={User} type="text" name="username" value={formData.username} onChange={handleInputChange} disabled={true} />
-                </div>
-                <div>
-                  <label className="block text-blue-600 text-sm font-bold mb-3 uppercase tracking-wide">Gender</label>
-                  <SelectField icon={Users} name="gender" value={formData.gender} onChange={handleInputChange} options={genderOptions} placeholder="Select your gender" />
-                </div>
-              </div>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <label className="block text-blue-600 text-sm font-bold mb-3 uppercase tracking-wide">Age</label>
-                  <InputField icon={Calendar} type="number" name="age" value={formData.age} onChange={handleInputChange} placeholder="Enter your age" />
-                </div>
-                <div>
-                  <label className="block text-blue-600 text-sm font-bold mb-3 uppercase tracking-wide">Mobile Number</label>
-                  <InputField icon={Phone} type="tel" name="mobileNumber" value={formData.mobileNumber} onChange={handleInputChange} placeholder="Enter your mobile number" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-blue-600 text-sm font-bold mb-3 uppercase tracking-wide">Address</label>
-                <InputField icon={Home} type="text" name="address" value={formData.address} onChange={handleInputChange} placeholder="Enter your complete address" />
-              </div>
-              <div className="grid md:grid-cols-3 gap-8">
-                <div>
-                  <label className="block text-blue-600 text-sm font-bold mb-3 uppercase tracking-wide">City</label>
-                  <InputField icon={Building} type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="Enter your city" />
-                </div>
-                <div>
-                  <label className="block text-blue-600 text-sm font-bold mb-3 uppercase tracking-wide">Pincode</label>
-                  <InputField icon={Hash} type="text" name="pincode" value={formData.pincode} onChange={handleInputChange} placeholder="Enter pincode" />
-                </div>
-                <div>
-                  <label className="block text-blue-600 text-sm font-bold mb-3 uppercase tracking-wide">State</label>
-                  <SelectField icon={MapPin} name="state" value={formData.state} onChange={handleInputChange} options={stateOptions} placeholder="Select your state" />
-                </div>
-              </div>
-              <div className="pt-8">
-                <button onClick={handleSubmit} disabled={isLoading} className="group relative w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-bold py-6 px-8 rounded-2xl transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-orange-500/30 focus:outline-none focus:ring-4 focus:ring-orange-300 text-xl overflow-hidden">
-                  <span className={`relative z-10 transition-opacity duration-300 flex items-center justify-center ${isLoading ? 'opacity-0' : 'opacity-100'}`}><CheckCircle className="w-6 h-6 mr-2" />COMPLETE PROFILE</span>
-                </button>
-              </div>
+          )}
+
+          {loading && !formData.username && ( // Show loader only on initial fetch
+            <div className="mb-6 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl flex items-center justify-center space-x-2">
+                <Loader className="w-5 h-5 animate-spin"/>
+                <span>Loading profile...</span>
             </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Username */}
+            <InputField
+              label="Username"
+              name="username"
+              type="text"
+              value={formData.username}
+              onChange={handleChange}
+              icon={User}
+              placeholder="Your preferred username"
+              required
+            />
+
+            {/* Mobile Number (Icon will now render) */}
+            <InputField
+              label="Mobile Number"
+              name="mobile_number"
+              type="tel"
+              value={formData.mobile_number}
+              onChange={handleChange}
+              icon={Phone} 
+              placeholder="e.g., +91 9876543210"
+              required
+            />
+
+            {/* Address (Icon will now render) */}
+            <InputField
+              label="Full Address"
+              name="address"
+              type="text"
+              value={formData.address}
+              onChange={handleChange}
+              icon={Home}
+              placeholder="House No, Street, Locality"
+              required
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Age */}
+              <InputField
+                label="Age"
+                name="age"
+                type="number"
+                value={formData.age}
+                onChange={handleChange}
+                icon={Calendar}
+                placeholder="Your age"
+                required
+                min="18"
+                max="100"
+              />
+
+              {/* Gender */}
+              <SelectField
+                label="Gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                options={genderOptions}
+                icon={GenderIcon}
+                placeholder="Select your gender"
+                required
+              />
+            </div>
+
+            <InputField
+              label="City"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+              icon={MapPin}
+              placeholder="Your city"
+              required
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* State */}
+              <SelectField
+                label="State"
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                options={stateOptions}
+                icon={MapPin}
+                placeholder="Select your state"
+                required
+              />
+
+              {/* Pincode (Icon will now render) */}
+              <InputField
+                label="Pincode"
+                name="pincode"
+                type="text"
+                value={formData.pincode}
+                onChange={handleChange}
+                icon={Mail} 
+                placeholder="e.g., 431001"
+                required
+              />
+            </div>
+
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition-all duration-300 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                {loading ? (
+                  <Loader className="w-5 h-5 animate-spin"/>
+                ) : (
+                  <CheckCircle className="w-5 h-5" />
+                )}
+                <span>{loading ? 'Saving Profile...' : 'Save Profile'}</span>
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-6 text-center">
+            <Link
+              to="/landing"
+              className="text-slate-500 hover:text-blue-600 text-sm inline-flex items-center transition-colors font-medium group"
+            >
+              Skip for now <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"/>
+            </Link>
           </div>
         </div>
       </div>

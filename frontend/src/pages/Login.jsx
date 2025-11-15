@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Eye, EyeOff, User, Lock, ShoppingCart, LogIn, ArrowRight, Shield, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
-import InputField from '../components/InputField';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({

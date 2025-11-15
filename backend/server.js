@@ -24,7 +24,6 @@ testConnection();
 const app = express();
 
 
-// --- START CORS FIX ---
 // Configure CORS to explicitly allow requests from your frontend's origin
 // Replace 'http://localhost:5173' with the actual URL of your frontend if different
 app.use(cors({
@@ -33,7 +32,6 @@ app.use(cors({
   credentials: true, // Allow cookies to be sent
   optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
 }));
-// --- END CORS FIX ---
 
 // app.use(cors());
 app.use(express.json());
