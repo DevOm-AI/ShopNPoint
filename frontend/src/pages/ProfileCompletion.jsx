@@ -82,12 +82,32 @@ const ProfileCompletionPage = () => {
 
   // --- Input Change Handler (UNCHANGED) ---
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    setError(''); // Clear error on change
+    const { name, value } = e.target;
+
+    if (name === "age") {
+      // allow clearing
+      if (value === "") {
+        setFormData({ ...formData, age: "" });
+        return;
+      }
+
+      const val = Number(value);
+      if (Number.isNaN(val)) return;
+
+      // block negative
+      if (val < 0) return;
+
+      // block below 18
+      // if (val < 18) return;
+
+      // block above 100
+      if (val > 100) return;
+    }
+
+    setFormData({ ...formData, [name]: value });
   };
+
+
 
   // --- Submit Handler (UNCHANGED) ---
   const handleSubmit = async (e) => {
@@ -160,7 +180,6 @@ const ProfileCompletionPage = () => {
     { value: 'Bihar', label: 'Bihar' }
   ];
 
-  // --- NEW PROFESSIONAL UI ---
   return (
     <div className={`min-h-screen bg-slate-50 flex items-center justify-center px-4 py-8 transition-opacity duration-500 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
       <div className="max-w-3xl w-full"> 
