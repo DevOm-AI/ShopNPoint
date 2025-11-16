@@ -12,6 +12,8 @@ import TokensPage from './pages/TokensPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import SettingsPage from './pages/SettingsPage';
 
+import SearchPage from './pages/SearchPage';
+
 
 import AdminLoginPage from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
@@ -33,6 +35,8 @@ function App() {
         <Route path="/orders" element={<OrderHistoryPage />} /> 
 
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/search" element={<SearchPage />} />
+
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>

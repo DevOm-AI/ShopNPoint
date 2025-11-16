@@ -128,9 +128,33 @@ const LandingPage = () => {
   ];
 
   const bannerSlides = [
-    { title: "Festive Deals on Electronics", subtitle: "Save up to 40%", description: "Top-rated gadgets from trusted brands.", color: "from-blue-50 to-indigo-50", icon: Laptop, align: "left" },
-    { title: "New Season Fashion", subtitle: "Fresh Arrivals Under ₹999", description: "Trendy outfits with quality you can trust.", color: "from-purple-50 to-pink-50", icon: Shirt, align: "right" },
-    { title: "Home Essentials Week", subtitle: "Up to 35% OFF", description: "Reliable appliances and cozy decor picks.", color: "from-green-50 to-teal-50", icon: HomeIcon, align: "left" }
+    { 
+      title: "Festive Deals on Electronics", 
+      subtitle: "Save up to 40%", 
+      description: "Top-rated gadgets from trusted brands.", 
+      color: "from-blue-100 to-indigo-100", // Kept light
+      icon: Laptop, 
+      iconColor: "text-blue-500", // Added
+      align: "left" 
+    },
+    { 
+      title: "New Season Fashion", 
+      subtitle: "Fresh Arrivals Under ₹999", 
+      description: "Trendy outfits with quality you can trust.", 
+      color: "from-purple-100 to-pink-100", // Kept light
+      icon: Shirt, 
+      iconColor: "text-purple-500", // Added
+      align: "right" 
+    },
+    { 
+      title: "Home Essentials Week", 
+      subtitle: "Up to 35% OFF", 
+      description: "Reliable appliances and cozy decor picks.", 
+      color: "from-green-100 to-teal-100", // Kept light
+      icon: HomeIcon, 
+      iconColor: "text-green-500", // Added
+      align: "left" 
+    }
   ];
   
   const navLinks = ["Home", "Shop", "Categories", "Deals", "Contact"];
@@ -264,57 +288,68 @@ const LandingPage = () => {
       </div>
     </div>
 
-    {/* --- Hero Banner (Minimalist) --- */}
-    {/* Softer shadow */}
+    {/* --- Hero Banner (Refactored for "Interesting" Visuals) --- */}
     <div className="relative h-[500px] overflow-hidden rounded-3xl shadow-md mb-16 max-w-7xl mx-auto border-2 border-slate-100">
-      {bannerSlides.map((slide, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
-          }`}
-        >
+      {bannerSlides.map((slide, index) => {
+        const isActive = index === currentSlide;
+        return (
           <div
-            className={`h-full w-full bg-gradient-to-br ${slide.color} flex items-center justify-center`}
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              isActive ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
           >
             <div
-              className={`max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center ${
-                slide.align === "right" ? "md:grid-flow-col-dense" : ""
-              }`}
+              className={`h-full w-full bg-gradient-to-br ${slide.color} flex items-center justify-center overflow-hidden`}
             >
               <div
-                className={`text-slate-900 space-y-5 ${
-                  slide.align === "right" ? "md:text-right" : "text-left"
+                className={`max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center ${
+                  slide.align === "right" ? "md:grid-flow-col-dense" : ""
                 }`}
               >
-                {/* Smaller, lighter font */}
-                <h2 className="text-4xl font-semibold leading-tight">
-                  {slide.title}
-                </h2>
-                <p className="text-lg text-slate-700">{slide.subtitle}</p>
-                <p className={`text-base text-slate-600 max-w-md ${slide.align === "right" ? "ml-auto" : ""}`}>
-                  {slide.description}
-                </p>
-
-                {/* Button is fine, shadow is softer */}
-                <button 
-                  className="bg-blue-600 text-white px-8 py-3 rounded-xl 
-                             text-sm font-semibold hover:bg-blue-700 
-                             transform hover:-translate-y-0.5 transition-all duration-300 shadow-md"
+                {/* Text slides in from the left */}
+                <div
+                  className={`text-slate-900 space-y-5 transform transition-all duration-700 ease-out ${
+                    slide.align === "right" ? "md:text-right" : "text-left"
+                  } ${isActive ? 'opacity-100 translate-x-0 delay-200' : 'opacity-0 -translate-x-10'}`}
                 >
-                  Shop Now
-                </button>
-              </div>
+                  <h2 className="text-4xl font-semibold leading-tight">
+                    {slide.title}
+                  </h2>
+                  <p className="text-lg text-slate-700">{slide.subtitle}</p>
+                  <p className={`text-base text-slate-600 max-w-md ${slide.align === "right" ? "ml-auto" : ""}`}>
+                    {slide.description}
+                  </p>
+                  
+                  <button 
+                    className="bg-blue-600 text-white px-8 py-3 rounded-xl 
+                               text-sm font-semibold hover:bg-blue-700 
+                               transform hover:-translate-y-0.5 transition-all duration-300 shadow-md"
+                  >
+                    Shop Now
+                  </button>
+                </div>
+                
+                {/* Icon visual slides in from the right */}
+                <div className={`relative flex justify-center items-center h-64 w-full transform transition-all duration-700 ease-out ${isActive ? 'opacity-100 translate-x-0 delay-400' : 'opacity-0 translate-x-10'}`}>
+                  
+                  {/* --- NEW: Duotone Background Icon --- */}
+                  <slide.icon 
+                    className={`absolute w-72 h-72 ${slide.iconColor} opacity-20 -rotate-12 transform-gpu`} 
+                    style={{ filter: 'blur(1px)' }}
+                  />
+                  {/* --- NEW: Main Icon (Larger) --- */}
+                  <slide.icon 
+                    className={`relative w-64 h-64 ${slide.iconColor} opacity-90 rotate-6 transform-gpu`} 
+                  />
 
-              <div className="relative flex justify-center items-center">
-                <div className="absolute w-64 h-64 bg-black/5 rounded-full blur-2xl"></div>
-                <div className="absolute w-80 h-80 bg-black/5 rounded-full blur-3xl"></div>
-                <slide.icon className="w-40 h-40 text-blue-400 relative z-10" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
+      
       {/* Dots (Unchanged) */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
         {bannerSlides.map((_, index) => (
@@ -330,6 +365,7 @@ const LandingPage = () => {
         ))}
       </div>
     </div>
+
 
     {/* Main (Minimalist) */}
     <main className="max-w-7xl mx-auto px-4 py-16 space-y-20 relative z-10">
@@ -454,16 +490,18 @@ const LandingPage = () => {
           </ul>
         </div>
         <div>
-          <h4 className="text-white font-semibold mb-3 text-sm uppercase">About</h4>
+          <h4 className="text-white font-semibold mb-3 text-sm uppercase">Pages</h4>
           <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-blue-400 transition-colors">About Us</a></li>
-            <li><a href="#" className="hover:text-blue-400 transition-colors">Contact</a></li>
-            <li><a href="#" className="hover:text-blue-400 transition-colors">Admin Portal</a></li>
+            <li><Link to="/dashboard" className="hover:text-blue-400 transition-colors">Dashboard</Link></li>
+            <li><Link to="/tokens" className="hover:text-blue-400 transition-colors">My Tokens</Link></li>
+            <li><Link to="/orders" className="hover:text-blue-400 transition-colors">My Orders</Link></li>
+            <li><Link to="/cart" className="hover:text-blue-400 transition-colors">Cart</Link></li>
+            <li><Link to="/settings" className="hover:text-blue-400 transition-colors">Settings</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="text-white font-semibold mb-3 text-sm uppercase">Contact</h4>
-          <ul classNameclassName="space-y-2 text-sm">
+          <ul className="space-y-2 text-sm">
             <li className="flex items-center"><Mail className="w-4 h-4 mr-2" /> support@snp.com</li>
             <li className="flex items-center"><Phone className="w-4 h-4 mr-2" /> +91 123 456 7890</li>
           </ul>

@@ -1,12 +1,12 @@
 // src/components/Logo.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom'; // <-- REMOVED THIS IMPORT
 import { ShoppingBag, Sparkles } from 'lucide-react';
 
 const Logo = () => {
   return (
-    <Link 
-      to="/landing" 
+    <div // <-- CHANGED FROM <Link> to <div>
+      // to="/landing" // <-- REMOVED THIS PROP
       className="group flex items-center gap-3 relative"
     >
       {/* Icon Container with Gradient Background */}
@@ -44,7 +44,7 @@ const Logo = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-indigo-400/0 to-purple-400/0 
                     group-hover:from-blue-400/10 group-hover:via-indigo-400/10 group-hover:to-purple-400/10
                     rounded-2xl blur-xl transition-all duration-300 -z-10" />
-    </Link>
+    </div> // <-- CHANGED FROM </Link> to </div>
   );
 };
 

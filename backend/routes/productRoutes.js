@@ -5,7 +5,8 @@ const router = express.Router();
 const { 
   getProductsByCategory, 
   getProductById,
-  getFeaturedProducts, // <-- This was missing
+  getFeaturedProducts,
+  searchProducts
 } = require('../controllers/productController');
 
 // It's good practice to place more specific text-based routes
@@ -13,6 +14,11 @@ const {
 router.get('/featured', getFeaturedProducts);
 
 router.get('/category/:categoryName', getProductsByCategory);
+
+
+// This will handle requests like: /api/products/search?q=laptop
+router.get('/search', searchProducts);
+
 router.get('/:id', getProductById);
 
 module.exports = router;

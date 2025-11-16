@@ -131,7 +131,6 @@ const ProfileCompletionPage = () => {
         },
       };
 
-      console.log("Worked till here");
 
       await axios.put(
         'http://localhost:5000/api/users/profile', // Using proxy

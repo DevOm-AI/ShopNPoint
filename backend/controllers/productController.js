@@ -22,42 +22,65 @@ const getProductsByCategory = asyncHandler(async (req, res) => {
   }
 });
 
-// --- ADD THIS NEW FUNCTION ---
 // @desc    Fetch a single product by its ID
 // @route   GET /api/products/:id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-  const { id } = req.params; // Get the ID from the URL parameter
+  const { id } = req.params; 
 
   const products = await executeQuery('SELECT * FROM products WHERE product_id = ?', [id]);
 
   if (products.length > 0) {
-    res.json(products[0]); // Return the single product found
+    res.json(products[0]); 
   } else {
     res.status(404);
     throw new Error('Product not found');
   }
 });
 
-// --- ADD THIS NEW FUNCTION ---
+
+// --- THIS IS THE FINAL, CORRECTED FUNCTION ---
+// @desc    Search for products
+// @route   GET /api/products/search
+// @access  Public
+// --- REPLACE your old searchProducts function with this one ---
+
+// @desc    Search for products
+// @route   GET /api/products/search
+// @access  Public
+const searchProducts = asyncHandler(async (req, res) => {
+  const query = req.query.q; 
+
+  if (!query) {
+    res.status(400);
+    throw new Error('Search query is required.');
+  }
+  
+  const sqlQuery = `SELECT * FROM products WHERE LOWER(name) LIKE '%${query.toLowerCase()}%'`;
+
+  // We pass the raw query string directly, with no parameters.
+  const products = await executeQuery(sqlQuery);
+
+  if (products && Array.isArray(products)) {
+    res.json(products);
+  } else {
+    res.json([]); // Always return an array
+  }
+});
+
+
+
 // @desc    Fetch featured products
 // @route   GET /api/products/featured
 // @access  Public
 const getFeaturedProducts = asyncHandler(async (req, res) => {
-  // We'll fetch the first 6 products as "featured"
   const query = 'SELECT * FROM products LIMIT 6';
   
-  console.log("Executing query for featured products:", query); // Debugging line
-  
   const products = await executeQuery(query);
-
-  console.log("Products found:", products); // Debugging line
   
   if (products && products.length > 0) {
     res.json(products);
   } else {
-    // This part is likely being triggered
-    console.log("No products found, returning 404.");
     res.status(404);
     throw new Error('No featured products found.');
   }
@@ -67,4 +90,5 @@ module.exports = {
   getProductsByCategory,
   getProductById,
   getFeaturedProducts,
+  searchProducts,
 };

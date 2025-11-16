@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, Coins, User, Menu, X, Settings, Package, LogOut, ChevronDown, Sparkles } from 'lucide-react';
 import axios from 'axios';
 import Logo from './Logo';
-import TokensPage from '../pages/TokensPage';
 
 const Header = () => {
+  const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [userName, setUserName] = useState(null);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -68,88 +68,96 @@ const Header = () => {
     };
   }, []);
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault(); 
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+      if (isMobileMenuOpen) setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
     <>
       <header className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? 'bg-white/95 backdrop-blur-xl shadow-lg' 
-          : 'bg-white/90 backdrop-blur-lg shadow-md'
+          ? 'bg-white/90 backdrop-blur-lg shadow-md' 
+          : 'bg-white/0 backdrop-blur-none shadow-none'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            {/* Logo */}
             <div className="flex-shrink-0">
               <Link to="/landing" className="block">
                 <Logo />
               </Link>
             </div>
 
-            {/* Search Bar - Desktop */}
             <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
-              <div className="relative w-full group">
+              <form className="relative w-full group" onSubmit={handleSearchSubmit}>
                 <input 
                   type="text" 
                   placeholder="Search for products, brands and more..." 
-                  className="w-full px-6 py-3.5 pl-12 rounded-2xl border-2 border-slate-200 bg-slate-50 
-                           focus:border-blue-500 focus:bg-white focus:outline-none 
+                  className="w-full px-6 py-3.5 pl-12 rounded-full border-2 border-slate-200 bg-slate-50 
+                           focus:border-blue-500 focus:bg-white focus:outline-none focus:shadow-md
                            transition-all duration-300 text-sm placeholder-slate-400
-                           hover:border-slate-300"
+                           hover:border-slate-300 hover:shadow-sm"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 
                                  group-focus-within:text-blue-500 transition-colors duration-300" />
-              </div>
+                <button type="submit" className="hidden">Search</button>
+              </form>
             </div>
 
-            {/* Right Side Actions */}
             <div className="flex items-center space-x-1 sm:space-x-2">
-              {/* Tokens Button */}
               <Link 
                 to="/tokens" 
-                className="group flex items-center gap-2 px-4 py-2.5 rounded-xl
-                         text-slate-700 hover:text-blue-600 hover:bg-blue-50
+                className="group flex items-center gap-2 px-4 py-2.5 rounded-full
+                         text-slate-600 font-medium hover:text-blue-600 hover:bg-blue-100
                          transition-all duration-200"
               >
                 <div className="relative">
-                  <Coins className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  <Coins className="w-5 h-5 transition-transform" />
                   <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <span className="font-semibold text-sm hidden sm:block">Tokens</span>
+                <span className="text-sm hidden sm:block">Tokens</span>
               </Link>
 
-              {/* Cart Button */}
               <Link 
                 to="/cart" 
-                className="relative group flex items-center gap-2 px-4 py-2.5 rounded-xl
-                         text-slate-700 hover:text-blue-600 hover:bg-blue-50
+                className="relative group flex items-center gap-2 px-4 py-2.5 rounded-full
+                         text-slate-600 font-medium hover:text-blue-600 hover:bg-blue-100
                          transition-all duration-200"
               >
                 <div className="relative">
-                  <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  <ShoppingCart className="w-5 h-5 transition-transform" />
                   {cartItemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-pink-500 
+                    <span className="absolute -top-2 -right-2 bg-blue-600 
                                    text-white text-xs font-bold rounded-full w-5 h-5 
-                                   flex items-center justify-center shadow-lg
-                                   animate-pulse">
+                                   flex items-center justify-center shadow-md
+                                   transform transition-transform group-hover:scale-110">
                       {cartItemCount}
                     </span>
                   )}
                 </div>
-                <span className="font-semibold text-sm hidden md:block">Cart</span>
+                <span className="text-sm hidden md:block">Cart</span>
               </Link>
 
-              {/* Profile Dropdown - Desktop */}
               <div className="relative hidden sm:block" ref={dropdownRef}>
                 <button
                   onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl
-                           text-slate-700 hover:text-blue-600 hover:bg-blue-50
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-full
+                           text-slate-600 font-medium hover:text-blue-600 hover:bg-blue-100
                            transition-all duration-200 group"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full 
-                                flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <User className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full 
+                                flex items-center justify-center 
+                                group-hover:bg-blue-600 group-hover:text-white 
+                                transition-all duration-200">
+                    <User className="w-4 h-4" />
                   </div>
-                  <span className="font-semibold text-sm hidden lg:block">
+                  <span className="font-medium text-sm hidden lg:block">
                     {userName ? `Hi, ${userName}` : 'Account'}
                   </span>
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 hidden lg:block ${
@@ -157,16 +165,14 @@ const Header = () => {
                   }`} />
                 </button>
 
-                {/* Dropdown Menu */}
                 {isProfileDropdownOpen && (
                   <div 
-                    className="absolute top-full right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl 
+                    className="absolute top-full right-0 mt-2 w-64 bg-white rounded-2xl shadow-lg
                              border border-slate-200 overflow-hidden animate-fade-in-up"
                   >
-                    {/* User Info Header */}
-                    <div className="px-4 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-slate-200">
+                    <div className="px-4 py-4 bg-blue-50 border-b border-slate-200">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full 
+                        <div className="w-12 h-12 bg-blue-600 rounded-full 
                                       flex items-center justify-center">
                           <User className="w-6 h-6 text-white" />
                         </div>
@@ -177,7 +183,6 @@ const Header = () => {
                       </div>
                     </div>
 
-                    {/* Menu Items */}
                     <div className="p-2">
                       <Link 
                         to="/dashboard" 
@@ -236,7 +241,6 @@ const Header = () => {
                 )}
               </div>
 
-              {/* Mobile Menu Button */}
               <button 
                 onClick={() => setIsMobileMenuOpen(true)}
                 className="lg:hidden p-2.5 rounded-xl text-slate-700 hover:text-blue-600 
@@ -247,19 +251,21 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Mobile Search Bar */}
           <div className="lg:hidden pb-4">
-            <div className="relative w-full group">
+            <form className="relative w-full group" onSubmit={handleSearchSubmit}>
               <input 
                 type="text" 
                 placeholder="Search products..." 
                 className="w-full px-5 py-3 pl-11 rounded-xl border-2 border-slate-200 bg-slate-50 
                          focus:border-blue-500 focus:bg-white focus:outline-none 
                          transition-all duration-300 text-sm placeholder-slate-400"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 
                                group-focus-within:text-blue-500 transition-colors duration-300" />
-            </div>
+              <button type="submit" className="hidden">Search</button>
+            </form>
           </div>
         </div>
       </header>
@@ -278,8 +284,7 @@ const Header = () => {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col h-full">
-            {/* Mobile Menu Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-8 relative overflow-hidden">
+            <div className="bg-blue-600 px-6 py-8 relative overflow-hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="absolute top-6 right-6 text-white/80 hover:text-white transition-colors p-2"
@@ -289,7 +294,7 @@ const Header = () => {
               
               {userName ? (
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
                     <User className="w-8 h-8 text-white" />
                   </div>
                   <div>
@@ -299,7 +304,7 @@ const Header = () => {
                 </div>
               ) : (
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
                     <User className="w-8 h-8 text-white" />
                   </div>
                   <div>
@@ -312,7 +317,6 @@ const Header = () => {
               )}
             </div>
 
-            {/* Mobile Menu Items */}
             <div className="flex-1 overflow-y-auto p-6 space-y-2">
               <Link 
                 to="/dashboard" 
@@ -338,6 +342,7 @@ const Header = () => {
                 <span className="font-semibold">My Orders</span>
               </Link>
 
+              {/* --- THIS IS THE FIX --- */}
               <Link 
                 to="/tokens" 
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -348,7 +353,8 @@ const Header = () => {
                   <Coins className="w-5 h-5 text-slate-600" />
                 </div>
                 <span className="font-semibold">My Tokens</span>
-              </Link>
+              </Link> 
+              {/* --- The typo was </Warning> here --- */}
 
               <Link 
                 to="/settings" 
