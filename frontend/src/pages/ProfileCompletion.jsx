@@ -80,7 +80,7 @@ const ProfileCompletionPage = () => {
     fetchProfile();
   }, [navigate]);
 
-  // --- Input Change Handler (UNCHANGED) ---
+  // --- Input Change Handler ---
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -97,17 +97,12 @@ const ProfileCompletionPage = () => {
       // block negative
       if (val < 0) return;
 
-      // block below 18
-      // if (val < 18) return;
-
       // block above 100
       if (val > 100) return;
     }
 
     setFormData({ ...formData, [name]: value });
   };
-
-
 
   // --- Submit Handler (UNCHANGED) ---
   const handleSubmit = async (e) => {
@@ -208,103 +203,143 @@ const ProfileCompletionPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Username */}
-            <InputField
-              label="Username"
-              name="username"
-              type="text"
-              value={formData.username}
-              onChange={handleChange}
-              icon={User}
-              placeholder="Your preferred username"
-              required
-            />
-
-            {/* Mobile Number (Icon will now render) */}
-            <InputField
-              label="Mobile Number"
-              name="mobile_number"
-              type="tel"
-              value={formData.mobile_number}
-              onChange={handleChange}
-              icon={Phone} 
-              placeholder="e.g., +91 9876543210"
-              required
-            />
-
-            {/* Address (Icon will now render) */}
-            <InputField
-              label="Full Address"
-              name="address"
-              type="text"
-              value={formData.address}
-              onChange={handleChange}
-              icon={Home}
-              placeholder="House No, Street, Locality"
-              required
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Age */}
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Username
+              </label>
               <InputField
-                label="Age"
-                name="age"
-                type="number"
-                value={formData.age}
+                label="Username"
+                name="username"
+                type="text"
+                value={formData.username}
                 onChange={handleChange}
-                icon={Calendar}
-                placeholder="Your age"
-                required
-                min="18"
-                max="100"
-              />
-
-              {/* Gender */}
-              <SelectField
-                label="Gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                options={genderOptions}
-                icon={GenderIcon}
-                placeholder="Select your gender"
+                icon={User}
+                placeholder="Your preferred username"
                 required
               />
             </div>
 
-            <InputField
-              label="City"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              icon={MapPin}
-              placeholder="Your city"
-              required
-            />
+            {/* Mobile Number (Icon will now render) */}
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Mobile Number
+              </label>
+              <InputField
+                label="Mobile Number"
+                name="mobile_number"
+                type="tel"
+                value={formData.mobile_number}
+                onChange={handleChange}
+                icon={Phone} 
+                placeholder="e.g., +91 9876543210"
+                required
+              />
+            </div>
+
+            {/* Address (Icon will now render) */}
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Address
+              </label>
+              <InputField
+                label="Full Address"
+                name="address"
+                type="text"
+                value={formData.address}
+                onChange={handleChange}
+                icon={Home}
+                placeholder="House No, Street, Locality"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Age */}
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Age
+                </label>
+                <InputField
+                  label="Age"
+                  name="age"
+                  type="number"
+                  value={formData.age}
+                  onChange={handleChange}
+                  icon={Calendar}
+                  placeholder="Your age"
+                  required
+                  min="18"
+                  max="100"
+                />
+              </div>
+
+              {/* Gender */}
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Gender
+                </label>
+                <SelectField
+                  label="Gender"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  options={genderOptions}
+                  icon={GenderIcon}
+                  placeholder="Select your gender"
+                  required
+                />
+                </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                City
+              </label>
+              <InputField
+                label="City"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                icon={MapPin}
+                placeholder="Your city"
+                required
+              />
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* State */}
-              <SelectField
-                label="State"
-                name="state"
-                value={formData.state}
-                onChange={handleChange}
-                options={stateOptions}
-                icon={MapPin}
-                placeholder="Select your state"
-                required
-              />
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  State
+                </label>
+                <SelectField
+                  label="State"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  options={stateOptions}
+                  icon={MapPin}
+                  placeholder="Select your state"
+                  required
+                />
+              </div>
 
               {/* Pincode (Icon will now render) */}
-              <InputField
-                label="Pincode"
-                name="pincode"
-                type="text"
-                value={formData.pincode}
-                onChange={handleChange}
-                icon={Mail} 
-                placeholder="e.g., 431001"
-                required
-              />
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                  Pin Code
+                </label>
+                <InputField
+                  label="Pincode"
+                  name="pincode"
+                  type="text"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  icon={Mail} 
+                  placeholder="e.g., 431001"
+                  required
+                />
+              </div>
             </div>
 
             <div className="pt-4">

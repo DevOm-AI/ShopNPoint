@@ -57,8 +57,11 @@ const RegistrationPage = () => {
           }
         );
 
+        localStorage.setItem("userInfo", JSON.stringify(data));
+
         alert(`Registration successful! Welcome, ${data.username}! Please login to continue.`);
         navigate('/login');
+
       } catch (error) {
         const errorMessage = error.response?.data?.message || 'An unexpected error occurred.';
         setErrors({ api: errorMessage });
