@@ -45,49 +45,60 @@ const TokensPage = () => {
         }
     };
 
+    // Updated loading/error states to match theme
     if (loading) {
-        return <div className="flex justify-center items-center h-screen bg-slate-50">Loading your rewards...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen bg-slate-50">
+                <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 
+                                rounded-full animate-spin"></div>
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="flex justify-center items-center h-screen bg-slate-50 text-red-500">{error}</div>;
+        return <div className="flex justify-center items-center h-screen bg-slate-50 text-red-600">{error}</div>;
     }
 
     return (
         <div className="min-h-screen bg-slate-50">
             <Header />
             <main className="max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-8">
+                {/* Header (Minimalist) */}
                 <header className="mb-8">
-                    <h1 className="text-4xl font-black text-gray-800">Tokens & Rewards</h1>
-                    <p className="text-lg text-gray-500 mt-1">View your balance, promo code, and transaction history.</p>
+                    <h1 className="text-3xl font-semibold text-slate-900">Tokens & Rewards</h1>
+                    <p className="text-lg text-slate-600 mt-1">View your balance, promo code, and transaction history.</p>
                 </header>
 
-                {/* --- Two divs side-by-side as requested --- */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                    {/* Total Tokens Card */}
-                    <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
+                    {/* Total Tokens Card (Minimalist) */}
+                    <div className="bg-white rounded-2xl p-8 shadow-md border border-slate-200 text-center">
                         <div className="flex items-center justify-center mb-4">
-                            <Coins className="w-10 h-10 text-orange-500" />
-                            <h2 className="ml-4 text-2xl font-bold text-gray-800">Your Token Balance</h2>
+                            <Coins className="w-8 h-8 text-blue-600" />
+                            {/* Lighter font */}
+                            <h2 className="ml-4 text-xl font-semibold text-slate-900">Your Token Balance</h2>
                         </div>
-                        <p className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500">
+                        {/* NO GRADIENT, Lighter font, Brand color */}
+                        <p className="text-6xl font-semibold text-blue-600">
                             {tokenData.totalTokens}
                         </p>
                     </div>
 
-                    {/* Promo Code Card */}
-                    <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
+                    {/* Promo Code Card (Minimalist) */}
+                    <div className="bg-white rounded-2xl p-8 shadow-md border border-slate-200 text-center">
                         <div className="flex items-center justify-center mb-4">
-                            <Gift className="w-10 h-10 text-blue-600" />
-                            <h2 className="ml-4 text-2xl font-bold text-gray-800">Your Promo Code</h2>
+                            <Gift className="w-8 h-8 text-blue-600" />
+                            {/* Lighter font */}
+                            <h2 className="ml-4 text-xl font-semibold text-slate-900">Your Promo Code</h2>
                         </div>
-                        <div className="relative flex items-center justify-center p-3 border-2 border-dashed border-gray-300 rounded-lg">
-                            <p className="text-3xl font-mono font-bold text-gray-700 tracking-widest">
+                        <div className="relative flex items-center justify-center p-3 border-2 border-dashed border-slate-300 rounded-lg">
+                            {/* Smaller, lighter font */}
+                            <p className="text-2xl font-mono font-semibold text-slate-700 tracking-widest">
                                 {tokenData.promoCode}
                             </p>
                             <button 
                                 onClick={handleCopy}
-                                className={`absolute right-2 p-2 rounded-lg transition-colors duration-200 ${isCopied ? 'bg-green-100 text-green-600' : 'bg-gray-100 hover:bg-gray-200 text-gray-600'}`}
+                                // Updated to slate palette
+                                className={`absolute right-2 p-2 rounded-lg transition-colors duration-200 ${isCopied ? 'bg-green-100 text-green-600' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'}`}
                             >
                                 {isCopied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                             </button>
@@ -95,37 +106,39 @@ const TokensPage = () => {
                     </div>
                 </div>
 
-                {/* --- Transaction History div below them --- */}
-                <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-6">Transaction History</h2>
+                {/* Transaction History (Minimalist) */}
+                <div className="bg-white rounded-2xl p-8 shadow-md border border-slate-200">
+                    {/* Lighter font */}
+                    <h2 className="text-xl font-semibold text-slate-900 mb-6">Transaction History</h2>
                     <div className="overflow-x-auto">
                         {tokenData.tokenHistory && tokenData.tokenHistory.length > 0 ? (
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
+                            <table className="min-w-full divide-y divide-slate-200">
+                                {/* Updated to slate palette */}
+                                <thead className="bg-slate-50">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tokens Earned</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tokens Used</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Reference</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Tokens Earned</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Tokens Used</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
+                                <tbody className="bg-white divide-y divide-slate-200">
                                     {tokenData.tokenHistory.map((item, index) => (
                                         <tr key={index}>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{item.reference}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-800">{item.reference}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600 flex items-center">
                                                 {item.earned ? <><TrendingUp className="w-4 h-4 mr-2" /> +{item.earned}</> : '-'}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-600 flex items-center">
                                                 {item.used ? <><TrendingDown className="w-4 h-4 mr-2" /> -{item.used}</> : '-'}
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(item.action_time).toLocaleDateString()}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">{new Date(item.action_time).toLocaleDateString()}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         ) : (
-                            <p className="text-center text-gray-500 py-4">You have no token transaction history yet.</p>
+                            <p className="text-center text-slate-500 py-4">You have no token transaction history yet.</p>
                         )}
                     </div>
                 </div>

@@ -1,30 +1,31 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Link is already imported
 import {
   Search, ShoppingCart, Coins, User, Menu, X, ArrowRight,
   Shirt, Laptop, Gem, Home as HomeIcon, ShoppingBag, Star, TrendingUp,
   Zap, Gift, Heart, Phone, Mail, MapPin,
   Award, Shield, Truck, ChevronRight, Settings, Package, LogOut,
-  Sparkles, // Added for headers
+  Sparkles,
 } from 'lucide-react';
 import Logo from '../components/Logo';
 import Header from '../components/Header'; 
 
-
+// --- CategoryCard (Minimalist) ---
 const CategoryCard = ({ category }) => {
   const { name, icon: Icon, itemCount } = category;
   return (
     <Link to={`/category/${name}`} className="block group">
+      {/* Softer hover shadow */}
       <div className="bg-white border-2 border-slate-100 rounded-2xl p-6 
-                    transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 
+                    transition-all duration-300 hover:shadow-md hover:-translate-y-1 
                     hover:border-blue-200 text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br 
-                      from-blue-100 to-indigo-100 rounded-2xl mb-4
-                      group-hover:from-blue-100 group-hover:to-indigo-200 transition-all">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-4
+                      group-hover:bg-blue-100 transition-all">
           <Icon className="w-8 h-8 text-blue-600" />
         </div>
-        <h3 className="font-bold text-lg text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">
+        {/* Lighter font-semibold */}
+        <h3 className="font-semibold text-lg text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">
           {name}
         </h3>
         <p className="text-sm text-slate-500">{itemCount} Products</p>
@@ -33,41 +34,37 @@ const CategoryCard = ({ category }) => {
   );
 };
 
-// --- NEW: ProductCard Component (Styled like SimpleProductCard) ---
+// --- ProductCard (Minimalist) ---
 const ProductCard = ({ product }) => {
   return (
-    <div className="block group">
+    <Link to={`/product/${product.id}`} className="block group h-full">
       <div className="bg-white border-2 border-slate-100 rounded-2xl overflow-hidden 
-                    transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 
-                    hover:border-blue-200 relative">
-        {/* Badge */}
+                    transition-all duration-300 hover:shadow-md hover:-translate-y-1 
+                    hover:border-blue-200 relative h-full flex flex-col">
+        
         {product.isNew && (
-          <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-blue-600 to-indigo-600 
-                        text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1
-                        shadow-lg">
+          <div className="absolute top-4 left-4 z-10 bg-blue-600 
+                        text-white text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1
+                        shadow-sm">
             <Sparkles className="w-3 h-3" />
             <span>New</span>
           </div>
         )}
 
-        {/* Product Image Placeholder */}
-        <div className="aspect-square bg-gradient-to-br from-slate-50 to-slate-100 
+        <div className="aspect-square bg-slate-50
                       flex items-center justify-center relative overflow-hidden group-hover:from-blue-50 
-                      group-hover:to-indigo-50 transition-all duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      transition-all duration-300">
           <product.icon className="w-20 h-20 text-slate-300 group-hover:text-blue-400 
                                  group-hover:scale-110 transition-all duration-300 relative z-10" />
         </div>
 
-        {/* Product Info */}
-        <div className="p-5">
-          <h3 className="font-bold text-slate-800 text-lg mb-3 line-clamp-2 
+        <div className="p-5 flex flex-col flex-grow">
+          {/* Lighter font-semibold */}
+          <h3 className="font-semibold text-slate-800 text-lg mb-3 line-clamp-2 
                        group-hover:text-blue-600 transition-colors duration-200 min-h-[3.5rem]">
             {product.name}
           </h3>
 
-          {/* Rating */}
           <div className="flex items-center gap-2 mb-3">
             <div className="flex items-center gap-0.5">
               {[...Array(5)].map((_, i) => (
@@ -80,10 +77,9 @@ const ProductCard = ({ product }) => {
             <span className="text-sm text-slate-600">({product.reviews})</span>
           </div>
 
-          {/* Price */}
           <div className="flex items-baseline gap-2 mb-4">
-            <p className="text-3xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 
-                        bg-clip-text text-transparent">
+            {/* Smaller, lighter price */}
+            <p className="text-2xl font-semibold text-slate-900">
               ₹{product.price.toFixed(2)}
             </p>
             <p className="text-sm text-slate-400 line-through">
@@ -91,14 +87,20 @@ const ProductCard = ({ product }) => {
             </p>
           </div>
           
-          {/* Tokens */}
-          <div className="px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg inline-flex items-center gap-2">
-              <Coins className="w-4 h-4 text-amber-500" />
-              <span className="text-sm font-semibold text-amber-700">Earn {product.tokens} Tokens</span>
+          <div className="flex-grow" />
+
+          {/* Button font is fine, it's a CTA */}
+          <div className="w-full bg-blue-100/60 group-hover:bg-blue-600 text-blue-700 group-hover:text-white
+                          py-3 rounded-xl font-semibold 
+                          transition-all duration-300 
+                          flex items-center justify-center gap-2
+                          mt-2">
+            <span>View Details</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -126,9 +128,9 @@ const LandingPage = () => {
   ];
 
   const bannerSlides = [
-    { title: "Festive Deals on Electronics", subtitle: "Save up to 40%", description: "Top-rated gadgets from trusted brands.", color: "from-blue-600 to-indigo-700", icon: Laptop, align: "left" },
-    { title: "New Season Fashion", subtitle: "Fresh Arrivals Under ₹999", description: "Trendy outfits with quality you can trust.", color: "from-purple-600 to-pink-600", icon: Shirt, align: "right" },
-    { title: "Home Essentials Week", subtitle: "Up to 35% OFF", description: "Reliable appliances and cozy decor picks.", color: "from-green-600 to-teal-700", icon: HomeIcon, align: "left" }
+    { title: "Festive Deals on Electronics", subtitle: "Save up to 40%", description: "Top-rated gadgets from trusted brands.", color: "from-blue-50 to-indigo-50", icon: Laptop, align: "left" },
+    { title: "New Season Fashion", subtitle: "Fresh Arrivals Under ₹999", description: "Trendy outfits with quality you can trust.", color: "from-purple-50 to-pink-50", icon: Shirt, align: "right" },
+    { title: "Home Essentials Week", subtitle: "Up to 35% OFF", description: "Reliable appliances and cozy decor picks.", color: "from-green-50 to-teal-50", icon: HomeIcon, align: "left" }
   ];
   
   const navLinks = ["Home", "Shop", "Categories", "Deals", "Contact"];
@@ -199,25 +201,17 @@ const LandingPage = () => {
   if (!mounted) return null;
 
   return (
-  // Refactored Page Background
-  <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 text-slate-900">
-    {/* Floating Background Elements */}
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-      <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
-    </div>
+  <div className="min-h-screen bg-slate-50 text-slate-900">
     
-    {/* Header (Imported) - All logic in this file still works with it */}
     <Header />
 
-    {/* Mobile Menu Overlay (Refactored) */}
+    {/* Mobile Menu (light fonts) */}
     <div
       className={`fixed inset-0 bg-black/50 z-50 transition-all duration-300 ${
         isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       onClick={() => setIsMobileMenuOpen(false)}
     >
-      {/* Glassmorphism Menu Panel */}
       <div
         className={`fixed top-0 right-0 h-full w-4/5 max-w-sm 
                   bg-white/90 backdrop-blur-xl shadow-2xl border-l border-white/20
@@ -233,12 +227,14 @@ const LandingPage = () => {
           >
             <X className="w-6 h-6" />
           </button>
-          <h2 className="text-2xl font-bold text-blue-600 mb-8 mt-2">Menu</h2>
+          {/* Lighter font */}
+          <h2 className="text-2xl font-semibold text-blue-600 mb-8 mt-2">Menu</h2>
           <nav className="flex flex-col space-y-3">
             {navLinks.map((link) => (
               <a
                 key={link}
                 href="#"
+                // font-medium is good here, not too bold
                 className="text-base font-medium text-slate-700 hover:text-blue-600 
                            px-3 py-2 rounded-lg transition-all"
               >
@@ -268,8 +264,9 @@ const LandingPage = () => {
       </div>
     </div>
 
-    {/* Hero Banner (Refactored) */}
-    <div className="relative h-[550px] overflow-hidden rounded-3xl shadow-2xl mb-16 max-w-7xl mx-auto">
+    {/* --- Hero Banner (Minimalist) --- */}
+    {/* Softer shadow */}
+    <div className="relative h-[500px] overflow-hidden rounded-3xl shadow-md mb-16 max-w-7xl mx-auto border-2 border-slate-100">
       {bannerSlides.map((slide, index) => (
         <div
           key={index}
@@ -286,38 +283,39 @@ const LandingPage = () => {
               }`}
             >
               <div
-                className={`text-white space-y-5 ${
+                className={`text-slate-900 space-y-5 ${
                   slide.align === "right" ? "md:text-right" : "text-left"
                 }`}
               >
-                <h2 className="text-4xl md:text-5xl font-black leading-tight">
+                {/* Smaller, lighter font */}
+                <h2 className="text-4xl font-semibold leading-tight">
                   {slide.title}
                 </h2>
-                <p className="text-lg md:text-xl opacity-90">{slide.subtitle}</p>
-                <p className={`text-base opacity-80 max-w-md ${slide.align === "right" ? "ml-auto" : ""}`}>
+                <p className="text-lg text-slate-700">{slide.subtitle}</p>
+                <p className={`text-base text-slate-600 max-w-md ${slide.align === "right" ? "ml-auto" : ""}`}>
                   {slide.description}
                 </p>
 
-                {/* Refactored Button */}
+                {/* Button is fine, shadow is softer */}
                 <button 
-                  className="bg-white text-slate-900 px-8 py-3 rounded-xl 
-                             text-sm font-semibold hover:bg-slate-50 
-                             transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg"
+                  className="bg-blue-600 text-white px-8 py-3 rounded-xl 
+                             text-sm font-semibold hover:bg-blue-700 
+                             transform hover:-translate-y-0.5 transition-all duration-300 shadow-md"
                 >
                   Shop Now
                 </button>
               </div>
 
               <div className="relative flex justify-center items-center">
-                <div className="absolute w-64 h-64 bg-white/10 rounded-full blur-2xl"></div>
-                <div className="absolute w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
-                <slide.icon className="w-40 h-40 text-white relative z-10" />
+                <div className="absolute w-64 h-64 bg-black/5 rounded-full blur-2xl"></div>
+                <div className="absolute w-80 h-80 bg-black/5 rounded-full blur-3xl"></div>
+                <slide.icon className="w-40 h-40 text-blue-400 relative z-10" />
               </div>
             </div>
           </div>
         </div>
       ))}
-      {/* Dots */}
+      {/* Dots (Unchanged) */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
         {bannerSlides.map((_, index) => (
           <button
@@ -325,15 +323,15 @@ const LandingPage = () => {
             onClick={() => setCurrentSlide(index)}
             className={`h-2.5 w-2.5 rounded-full transition-all ${
               index === currentSlide
-                ? "bg-white scale-125"
-                : "bg-white/50 hover:bg-white/70"
+                ? "bg-blue-600 scale-125"
+                : "bg-slate-400 hover:bg-slate-500"
             }`}
           />
         ))}
       </div>
     </div>
 
-    {/* Main (Refactored) */}
+    {/* Main (Minimalist) */}
     <main className="max-w-7xl mx-auto px-4 py-16 space-y-20 relative z-10">
       {/* Categories */}
       <section>
@@ -342,9 +340,10 @@ const LandingPage = () => {
             <Sparkles className="w-4 h-4" />
             <span>Top Picks</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
+          {/* Smaller, lighter font */}
+          <h2 className="text-3xl font-semibold text-slate-900 mb-4">
             Shop by{" "}
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-blue-600">
               Category
             </span>
           </h2>
@@ -359,27 +358,29 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Flash Deals (Refactored) */}
-      <section className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl 
-                        p-10 text-white shadow-2xl relative overflow-hidden">
-        <div className="absolute inset-0 bg-white/5"></div>
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center">
+      {/* "Today's Deals" (Minimalist) */}
+      <section className="bg-white border-2 border-slate-100 rounded-2xl p-8
+                        transition-all duration-300 hover:shadow-md">
+        <div className="flex flex-col md:flex-row justify-between items-center">
           <div>
-            <h3 className="text-3xl font-bold mb-2 flex items-center space-x-2">
-              <Zap className="w-8 h-8" />
-              <span>Flash Deals</span>
+            {/* Smaller, lighter font */}
+            <h3 className="text-2xl font-semibold mb-2 flex items-center space-x-2 text-slate-900">
+              <Zap className="w-7 h-7 text-blue-600" />
+              <span>Today's Deals</span>
             </h3>
-            <p className="text-lg opacity-90">Exclusive offers, ending soon!</p>
+            <p className="text-lg text-slate-600">Exclusive offers, ending soon!</p>
           </div>
           <div className="flex items-center space-x-3 mt-6 md:mt-0">
-            <div className="bg-white/10 px-5 py-3 rounded-xl text-center">
-              <div className="text-3xl font-bold">12</div>
-              <div className="text-xs opacity-80">Hours</div>
+            <div className="bg-slate-100 px-5 py-3 rounded-xl text-center">
+              {/* Smaller, lighter font */}
+              <div className="text-2xl font-semibold text-slate-900">12</div>
+              <div className="text-xs text-slate-500">Hours</div>
             </div>
-            <div className="text-2xl font-bold opacity-50">:</div>
-            <div className="bg-white/10 px-5 py-3 rounded-xl text-center">
-              <div className="text-3xl font-bold">34</div>
-              <div className="text-xs opacity-80">Mins</div>
+            <div className="text-2xl font-semibold text-slate-300">:</div>
+            <div className="bg-slate-100 px-5 py-3 rounded-xl text-center">
+              {/* Smaller, lighter font */}
+              <div className="text-2xl font-semibold text-slate-900">34</div>
+              <div className="text-xs text-slate-500">Mins</div>
             </div>
           </div>
         </div>
@@ -392,61 +393,64 @@ const LandingPage = () => {
             <TrendingUp className="w-4 h-4" />
             <span>Don't Miss Out</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4">
+          {/* Smaller, lighter font */}
+          <h2 className="text-3xl font-semibold text-slate-900 mb-4">
             Featured{" "}
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-blue-600">
               Products
             </span>
           </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredProducts.map((product) => (
-            <Link key={product.id} to={`/product/${product.id}`} className="group">
-              <ProductCard product={product} />
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>
 
-      {/* Highlights (Refactored) */}
+      {/* Highlights (Minimalist) */}
       <section className="grid md:grid-cols-3 gap-6">
         <div className="bg-white border-2 border-slate-100 rounded-2xl p-8 
-                        transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 
+                        transition-all duration-300 hover:shadow-md hover:-translate-y-1 
                         hover:border-blue-200">
           <Award className="w-8 h-8 text-blue-600 mb-4" />
-          <h3 className="text-xl font-bold text-slate-900 mb-1">Quality Assured</h3>
+          {/* Smaller, lighter font */}
+          <h3 className="text-lg font-semibold text-slate-900 mb-1">Quality Assured</h3>
           <p className="text-slate-600">Only the best handpicked items.</p>
         </div>
         <div className="bg-white border-2 border-slate-100 rounded-2xl p-8 
-                        transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 
+                        transition-all duration-300 hover:shadow-md hover:-translate-y-1 
                         hover:border-blue-200">
           <Shield className="w-8 h-8 text-blue-600 mb-4" />
-          <h3 className="text-xl font-bold text-slate-900 mb-1">Secure Payments</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-1">Secure Payments</h3>
           <p className="text-slate-600">Your transactions are protected.</p>
         </div>
         <div className="bg-white border-2 border-slate-100 rounded-2xl p-8 
-                        transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 
+                        transition-all duration-300 hover:shadow-md hover:-translate-y-1 
                         hover:border-blue-200">
           <Truck className="w-8 h-8 text-blue-600 mb-4" />
-          <h3 className="text-xl font-bold text-slate-900 mb-1">Fast Delivery</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-1">Fast Delivery</h3>
           <p className="text-slate-600">Reliable and quick shipping.</p>
         </div>
       </section>
     </main>
 
-    {/* Footer (Refactored) */}
+    {/* --- Footer (MODIFIED) --- */}
     <footer className="bg-slate-900 text-slate-400 py-10 mt-20 relative z-10">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
         <div className="col-span-2 md:col-span-1">
-          <Logo /> {/* Assuming Logo component handles its own dark-mode styling */}
+          <Logo />
           <p className="text-sm mt-4">Your premium e-commerce destination.</p>
         </div>
         <div>
           <h4 className="text-white font-semibold mb-3 text-sm uppercase">Shop</h4>
+          {/* --- MODIFIED: Replaced <a> with <Link> --- */}
           <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-blue-400 transition-colors">Clothing</a></li>
-            <li><a href="#" className="hover:text-blue-400 transition-colors">Electronics</a></li>
-            <li><a href="#" className="hover:text-blue-400 transition-colors">Home</a></li>
+            <li><Link to="/category/Clothing" className="hover:text-blue-400 transition-colors">Clothing</Link></li>
+            <li><Link to="/category/Electronics" className="hover:text-blue-400 transition-colors">Electronics</Link></li>
+            <li><Link to="/category/Home Appliances" className="hover:text-blue-400 transition-colors">Home Appliances</Link></li>
+            <li><Link to="/category/Jewellery" className="hover:text-blue-400 transition-colors">Jewellery</Link></li>
+            <li><Link to="/category/Footwear" className="hover:text-blue-400 transition-colors">Footwear</Link></li>
           </ul>
         </div>
         <div>
@@ -459,7 +463,7 @@ const LandingPage = () => {
         </div>
         <div>
           <h4 className="text-white font-semibold mb-3 text-sm uppercase">Contact</h4>
-          <ul className="space-y-2 text-sm">
+          <ul classNameclassName="space-y-2 text-sm">
             <li className="flex items-center"><Mail className="w-4 h-4 mr-2" /> support@snp.com</li>
             <li className="flex items-center"><Phone className="w-4 h-4 mr-2" /> +91 123 456 7890</li>
           </ul>

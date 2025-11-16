@@ -19,7 +19,7 @@ import {
 const SettingsPage = () => {
   const navigate = useNavigate();
 
-  // --- (All state variables are Unchanged) ---
+  // --- (All state and logic is Unchanged) ---
   const [passwordData, setPasswordData] = useState({ oldPassword: '', newPassword: '', confirmPassword: '' });
   const [isSavingPassword, setIsSavingPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
@@ -30,7 +30,6 @@ const SettingsPage = () => {
   const [deleteError, setDeleteError] = useState('');
   const [focusedField, setFocusedField] = useState('');
 
-  // --- (All handlers and logic functions are Unchanged) ---
   const handlePasswordChange = (e) => {
     setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
     setPasswordError('');
@@ -109,6 +108,7 @@ const SettingsPage = () => {
       localStorage.removeItem('userInfo');
       navigate('/login');
 
+    // --- INDENTATION FIX IS HERE ---
     } catch (err) {
       const errorMsg = err.response?.data?.message || 'Failed to delete account.';
       setDeleteError(errorMsg);
@@ -119,15 +119,12 @@ const SettingsPage = () => {
     } finally {
       setIsDeleting(false);
     }
+    // --- END OF FIX ---
   };
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }}></div>
-      </div>
+    <div className="min-h-screen bg-slate-50">
       
       <Header />
       
@@ -138,9 +135,9 @@ const SettingsPage = () => {
             <ShieldCheck className="w-4 h-4" />
             <span>Account Security</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-4">
+          <h1 className="text-3xl font-semibold text-slate-900 mb-4">
             Account
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-blue-600">
               {" "}Settings
             </span>
           </h1>
@@ -149,9 +146,8 @@ const SettingsPage = () => {
           </p>
         </div>
 
-        {/* --- Change Password Card (Glassmorphism Style) --- */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-8 border border-white/20">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+        <div className="bg-white rounded-2xl shadow-md p-6 md:p-8 border border-slate-200">
+          <h2 className="text-xl font-semibold text-slate-900 mb-6 flex items-center">
             <ShieldCheck className="w-6 h-6 mr-3 text-blue-600" />
             Change Password
           </h2>
@@ -172,14 +168,13 @@ const SettingsPage = () => {
             <InputItem icon={Lock} label="New Password" name="newPassword" type="password" value={passwordData.newPassword} onChange={handlePasswordChange} focusedField={focusedField} setFocusedField={setFocusedField} placeholder="Must be at least 6 characters" />
             <InputItem icon={Lock} label="Confirm New Password" name="confirmPassword" type="password" value={passwordData.confirmPassword} onChange={handlePasswordChange} focusedField={focusedField} setFocusedField={setFocusedField} placeholder="Re-type your new password" />
 
-            <div className="flex justify-end pt-4 border-t border-slate-200/50">
+            <div className="flex justify-end pt-4 border-t border-slate-200">
               <button
                 type="submit"
                 disabled={isSavingPassword}
-                className="w-auto bg-gradient-to-r from-blue-600 to-indigo-600 
-                           hover:from-blue-700 hover:to-indigo-700 
+                className="w-auto bg-blue-600 hover:bg-blue-700
                            text-white font-semibold py-3 px-6 rounded-xl 
-                           shadow-lg hover:shadow-xl 
+                           shadow-md hover:shadow-lg
                            transform hover:-translate-y-0.5 transition-all duration-200 
                            disabled:opacity-50 disabled:cursor-not-allowed 
                            disabled:transform-none
@@ -196,24 +191,22 @@ const SettingsPage = () => {
           </form>
         </div>
 
-        {/* --- Delete Account Card (Destructive Glassmorphism Style) --- */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 md:p-8 
-                        border border-red-300/30 mt-12">
-          <h2 className="text-2xl font-bold text-red-600 mb-4 flex items-center">
+        <div className="bg-white rounded-2xl shadow-md p-6 md:p-8 
+                        border border-red-300 mt-12">
+          <h2 className="text-xl font-semibold text-red-600 mb-4 flex items-center">
             <Trash2 className="w-6 h-6 mr-3" />
             Delete Account
           </h2>
           <p className="text-slate-600 mb-6">
             This action is permanent and cannot be undone. All your data, including order history and tokens, will be permanently erased.
           </p>
-          <div className="flex justify-end pt-6 border-t border-slate-200/50">
+          <div className="flex justify-end pt-6 border-t border-slate-200">
             <button
               onClick={() => setIsModalOpen(true)}
               disabled={isDeleting}
-              className="w-auto bg-gradient-to-r from-red-500 to-pink-600 
-                         hover:from-red-600 hover:to-pink-700 
+              className="w-auto bg-red-600 hover:bg-red-700
                          text-white font-semibold py-3 px-6 rounded-xl 
-                         shadow-lg hover:shadow-xl 
+                         shadow-md hover:shadow-lg
                          transform hover:-translate-y-0.5 transition-all duration-200 
                          disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -223,16 +216,15 @@ const SettingsPage = () => {
         </div>
       </main>
 
-      {/* --- (Modal is Unchanged, it was already glassmorphism) --- */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-60 backdrop-blur-md">
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl 
-                        border border-white/20 max-w-lg w-full overflow-hidden 
+          <div className="bg-white rounded-2xl shadow-xl
+                        max-w-lg w-full overflow-hidden 
                         transform transition-all duration-300 scale-100">
             
             <div className="p-6 md:p-8">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-red-600">Are you absolutely sure?</h2>
+                <h2 className="text-2xl font-semibold text-red-600">Are you absolutely sure?</h2>
                 <button 
                   onClick={() => setIsModalOpen(false)} 
                   className="text-slate-400 hover:text-slate-600"
@@ -278,10 +270,9 @@ const SettingsPage = () => {
                   <button
                     type="submit"
                     disabled={deleteConfirmText !== 'DELETE' || isDeleting}
-                    className="bg-gradient-to-r from-red-500 to-pink-600 
-                               hover:from-red-600 hover:to-pink-700 
+                    className="bg-red-600 hover:bg-red-700
                                text-white font-semibold py-3 px-6 rounded-xl 
-                               shadow-lg hover:shadow-xl transition-all duration-200 
+                               shadow-md hover:shadow-lg transition-all duration-200 
                                disabled:opacity-50 disabled:cursor-not-allowed 
                                flex items-center justify-center gap-2"
                   >
@@ -303,7 +294,6 @@ const SettingsPage = () => {
   );
 };
 
-// --- (Helper component is Unchanged) ---
 const InputItem = ({ icon: Icon, label, name, type = 'text', value, onChange, focusedField, setFocusedField, placeholder, className = '' }) => (
   <div className={`group ${className}`}>
     {label && <label className="block text-sm font-medium text-slate-700 mb-2">{label}</label>}

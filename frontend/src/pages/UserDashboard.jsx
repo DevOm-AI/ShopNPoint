@@ -32,7 +32,7 @@ const UserDashboard = () => {
 
   const navigate = useNavigate();
 
-  // --- Effect Hook to Fetch User Details ---
+  // --- Effect Hook (Unchanged) ---
   useEffect(() => {
     const fetchUserDetails = async () => {
       setError('');
@@ -48,7 +48,6 @@ const UserDashboard = () => {
           };
           const { data } = await axios.get('http://localhost:5000/api/users/profile', config);
           setUserDetails(data);
-          // Initialize edit form state with fetched user details
           setEditForm({
             username: data.username || '',
             age: data.age || '',
@@ -74,7 +73,7 @@ const UserDashboard = () => {
     fetchUserDetails();
   }, [navigate]);
 
-  // --- Handlers for Edit Mode ---
+  // --- Handlers (Unchanged) ---
   const handleEditClick = () => {
     setIsEditing(true);
     setError(''); 
@@ -85,7 +84,6 @@ const UserDashboard = () => {
     setIsEditing(false);
     setError('');
     setSuccess('');
-    // Re-initialize edit form with original details (if available)
     if (userDetails) {
       setEditForm({
         username: userDetails.username || '',
@@ -125,11 +123,8 @@ const UserDashboard = () => {
         },
       };
 
-      // Filter out empty or unchanged fields to send only actual updates
       const updatedFields = {};
       for (const key in editForm) {
-        // We only send fields if their value is different from the original userDetails
-        // and if they are not undefined/null from the form (i.e., user actively changed/entered something)
         if (editForm[key] !== userDetails[key] && editForm[key] !== undefined && editForm[key] !== null) {
           updatedFields[key] = editForm[key];
         }
@@ -153,11 +148,13 @@ const UserDashboard = () => {
     }
   };
 
-  // --- Loading and Error States ---
+  // --- Loading and Error States (Minimalist) ---
   if (!userDetails) {
     return (
+        // Consistent spinner
         <div className="flex justify-center items-center h-screen bg-slate-50">
-            <div className="text-xl font-semibold text-gray-700">Loading Dashboard...</div>
+            <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 
+                            rounded-full animate-spin"></div>
         </div>
     );
   }
@@ -165,7 +162,7 @@ const UserDashboard = () => {
   if (error && !isEditing) { 
      return (
         <div className="flex justify-center items-center h-screen bg-slate-50">
-            <div className="text-xl font-semibold text-red-500">{error}</div>
+            <div className="text-xl font-semibold text-red-600">{error}</div>
         </div>
     );
   }
@@ -175,16 +172,19 @@ const UserDashboard = () => {
       <Header />
 
       <main className="max-w-screen-xl mx-auto p-4 sm:p-6 lg:p-8">
+        {/* Header (Minimalist) */}
         <header className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-4xl font-black text-gray-800">
+            {/* Lighter, smaller font */}
+            <h1 className="text-3xl font-semibold text-slate-900">
               User Dashboard
             </h1>
-            <p className="text-lg text-gray-500 mt-1">
-              Welcome back, {userDetails.username || 'User'}! Here are your details.
+            {/* Slate palette */}
+            <p className="text-lg text-slate-600 mt-1">
+              Welcome back, {userDetails.username || 'User'}!
             </p>
           </div>
-          {/* Edit Profile Button */}
+          {/* Edit Profile Button (This was already good, matches new style) */}
           {!isEditing && (
             <button
               onClick={handleEditClick}
@@ -195,30 +195,31 @@ const UserDashboard = () => {
           )}
         </header>
 
-        {/* Success and Error Messages */}
+        {/* Success/Error (Unchanged, already good) */}
         {success && <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">{success}</div>}
         {error && isEditing && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">{error}</div>}
 
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
-          {/* User Details Card */}
-          <div className="lg:col-span-2 bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+          {/* User Details Card (Minimalist) */}
+          {/* Softer shadow, slate border */}
+          <div className="lg:col-span-2 bg-white rounded-2xl p-8 shadow-md border border-slate-200">
             <div className="flex items-center mb-6">
               <User className="w-8 h-8 text-blue-600" />
-              <h2 className="ml-4 text-2xl font-bold text-gray-800">User Details</h2>
+              {/* Lighter, smaller font, slate color */}
+              <h2 className="ml-4 text-xl font-semibold text-slate-900">User Details</h2>
             </div>
             
-            <div className="border-t border-gray-200 pt-6">
+            <div className="border-t border-slate-200 pt-6">
               <form onSubmit={handleFormSubmit}>
                 <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
                   
-                  {/* Conditionally render inputs or static text using YOUR COMPONENTS */}
                   {isEditing ? (
                     <>
+                      {/* These components are fine, they don't have the "fraudulent" styling */}
                       <InputField icon={User} label="Username" name="username" value={editForm.username} onChange={handleFormChange} />
                       <InputField icon={CalendarDays} label="Age" name="age" type="number" value={editForm.age} onChange={handleFormChange} />
-                      
                       <SelectField 
                         icon={Tag} 
                         label="Gender" 
@@ -228,7 +229,6 @@ const UserDashboard = () => {
                         options={['Male', 'Female', 'Other'].map(gender => ({ value: gender, label: gender }))}
                         placeholder="Select Gender"
                       />
-                      
                       <InputField icon={Phone} label="Mobile Number" name="mobile_number" value={editForm.mobile_number} onChange={handleFormChange} />
                       <InputField icon={MapPin} label="Address" name="address" value={editForm.address} onChange={handleFormChange} />
                       <InputField icon={MapPin} label="City" name="city" value={editForm.city} onChange={handleFormChange} />
@@ -238,6 +238,7 @@ const UserDashboard = () => {
                     </>
                   ) : (
                     <>
+                      {/* DetailItem helper component now uses slate palette */}
                       <DetailItem icon={User} label="Username" value={userDetails.username} />
                       <DetailItem icon={CalendarDays} label="Age" value={userDetails.age} />
                       <DetailItem icon={Tag} label="Gender" value={userDetails.gender || 'Not specified'} />
@@ -253,13 +254,15 @@ const UserDashboard = () => {
 
                 {isEditing && (
                   <div className="mt-8 flex justify-end gap-4">
+                    {/* Cancel button updated to slate palette */}
                     <button
                       type="button"
                       onClick={handleCancelClick}
-                      className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl shadow-sm hover:bg-gray-50 transition duration-300 flex items-center gap-2"
+                      className="px-6 py-3 border border-slate-300 text-slate-700 rounded-xl shadow-sm hover:bg-slate-50 transition duration-300 flex items-center gap-2"
                     >
                       <X className="w-5 h-5" /> Cancel
                     </button>
+                    {/* Save button is fine */}
                     <button
                       type="submit"
                       className="px-6 py-3 bg-green-600 text-white rounded-xl shadow-md hover:bg-green-700 transition duration-300 flex items-center gap-2"
@@ -272,17 +275,19 @@ const UserDashboard = () => {
             </div>
           </div>
 
-          {/* Total Tokens Card */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
+          {/* Total Tokens Card (Minimalist) */}
+          <div className="bg-white rounded-2xl p-8 shadow-md border border-slate-200">
             <div className="flex items-center mb-6">
-              <Coins className="w-8 h-8 text-orange-500" />
-              <h2 className="ml-4 text-2xl font-bold text-gray-800">Total Tokens</h2>
+              {/* Blue icon to match TokensPage */}
+              <Coins className="w-8 h-8 text-blue-600" />
+              <h2 className="ml-4 text-xl font-semibold text-slate-900">Total Tokens</h2>
             </div>
-            <div className="border-t border-gray-200 pt-6 text-center">
-              <p className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500">
+            <div className="border-t border-slate-200 pt-6 text-center">
+              {/* NO GRADIENT, lighter font, brand color */}
+              <p className="text-6xl font-semibold text-blue-600">
                 {userDetails.total_tokens || 0}
               </p>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-slate-600">
                 Earn more tokens by shopping with us!
               </p>
             </div>
@@ -293,13 +298,14 @@ const UserDashboard = () => {
   );
 };
 
-// Helper component for consistent styling of detail items (view mode)
+// Helper component (Minimalist)
+// Updated to use slate palette
 const DetailItem = ({ icon: Icon, label, value }) => (
   <div className="flex items-start">
-    <Icon className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+    <Icon className="w-5 h-5 text-slate-400 mt-1 flex-shrink-0" />
     <div className="ml-4">
-      <dt className="text-sm font-medium text-gray-500">{label}</dt>
-      <dd className="mt-1 text-lg font-semibold text-gray-900">{value || 'N/A'}</dd>
+      <dt className="text-sm font-medium text-slate-600">{label}</dt>
+      <dd className="mt-1 text-lg font-semibold text-slate-900">{value || 'N/A'}</dd>
     </div>
   </div>
 );
