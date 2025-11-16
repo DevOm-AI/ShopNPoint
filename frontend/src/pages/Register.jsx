@@ -4,6 +4,7 @@ import { User, Lock, Phone, Home, Eye, EyeOff, CheckCircle2, ArrowRight } from '
 import axios from 'axios';
 
 const RegistrationPage = () => {
+  // --- (All state and logic is unchanged) ---
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -74,24 +75,23 @@ const RegistrationPage = () => {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute -bottom-32 left-40 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse" style={{ animationDelay: '2s' }}></div>
-      </div>
+    // --- MODIFIED: Simplified background ---
+    <div className="min-h-screen bg-slate-50 flex">
+      
+      {/* --- REMOVED: Animated Background Elements --- */}
 
-      {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center p-12">
+      {/* Left Side - Branding (Minimalist) */}
+      <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center p-12 border-r border-slate-200">
         <div className="relative z-10 max-w-md">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mb-8 shadow-lg">
+          {/* --- MODIFIED: Solid icon background --- */}
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-8 shadow-md">
             <User className="w-8 h-8 text-white" />
           </div>
           
-          <h1 className="text-5xl font-bold text-slate-900 mb-6 leading-tight">
+          {/* --- MODIFIED: Lighter, smaller font, no gradient --- */}
+          <h1 className="text-3xl font-semibold text-slate-900 mb-6 leading-tight">
             Join Our<br />
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="text-blue-600">
               Platform
             </span>
           </h1>
@@ -100,7 +100,7 @@ const RegistrationPage = () => {
             Create your account and start exploring our premium e-commerce experience.
           </p>
 
-          {/* Feature List */}
+          {/* Feature List (This style is already minimalist and good) */}
           <div className="space-y-4">
             {[
               'Secure & encrypted data',
@@ -125,20 +125,24 @@ const RegistrationPage = () => {
       {/* Right Side - Form */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative z-10">
         <div className="w-full max-w-md">
-          {/* Mobile Logo */}
+          {/* Mobile Logo (Minimalist) */}
           <div className="lg:hidden flex justify-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-lg">
+            {/* --- MODIFIED: Solid icon background --- */}
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-xl shadow-md">
               <User className="w-7 h-7 text-white" />
             </div>
           </div>
 
-          {/* Form Card */}
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 sm:p-10 border border-white/20">
+          {/* Form Card (Minimalist) */}
+          {/* --- MODIFIED: Removed glassmorphism, added standard card style --- */}
+          <div className="bg-white rounded-2xl shadow-md p-8 sm:p-10 border border-slate-200">
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h2>
+              {/* --- MODIFIED: Lighter, smaller font --- */}
+              <h2 className="text-2xl font-semibold text-slate-900 mb-2">Create Account</h2>
               <p className="text-slate-600">Fill in your details to get started</p>
             </div>
 
+            {/* --- (Error styles are fine) --- */}
             {errors.api && (
               <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-start gap-2">
                 <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -149,7 +153,7 @@ const RegistrationPage = () => {
             )}
 
             <div className="space-y-5">
-              {/* Username */}
+              {/* --- (Input fields are already in the minimalist style) --- */}
               <div className="group">
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Username
@@ -173,7 +177,6 @@ const RegistrationPage = () => {
                 {errors.username && <p className="mt-2 text-sm text-red-600 flex items-center gap-1">{errors.username}</p>}
               </div>
 
-              {/* Mobile Number */}
               <div className="group">
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Mobile Number
@@ -197,7 +200,6 @@ const RegistrationPage = () => {
                 {errors.mobile_number && <p className="mt-2 text-sm text-red-600">{errors.mobile_number}</p>}
               </div>
 
-              {/* Address */}
               <div className="group">
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Address
@@ -221,7 +223,6 @@ const RegistrationPage = () => {
                 {errors.address && <p className="mt-2 text-sm text-red-600">{errors.address}</p>}
               </div>
 
-              {/* Password */}
               <div className="group">
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Password
@@ -253,12 +254,13 @@ const RegistrationPage = () => {
                 {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
               </div>
 
-              {/* Submit Button */}
+              {/* Submit Button (Minimalist) */}
               <button
                 onClick={handleSubmit}
                 disabled={isLoading}
-                className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 
-                          text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl 
+                // --- MODIFIED: Removed gradient, softer shadow ---
+                className="w-full mt-6 bg-blue-600 hover:bg-blue-700 
+                          text-white font-semibold py-4 px-6 rounded-xl shadow-md hover:shadow-lg 
                           transform hover:-translate-y-0.5 transition-all duration-200 
                           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
                           flex items-center justify-center gap-2 group"
@@ -274,7 +276,7 @@ const RegistrationPage = () => {
               </button>
             </div>
 
-            {/* Footer */}
+            {/* Footer (Already good) */}
             <div className="mt-8 pt-6 border-t border-slate-200 text-center">
               <p className="text-slate-600">
                 Already have an account?{' '}
@@ -288,7 +290,6 @@ const RegistrationPage = () => {
             </div>
           </div>
 
-          {/* Trust Badges */}
           <div className="mt-6 text-center">
             <p className="text-xs text-slate-500">
               Protected by 256-bit SSL encryption
