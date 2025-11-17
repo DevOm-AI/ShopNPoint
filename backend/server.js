@@ -40,7 +40,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // make the public folder static
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
 
 
 // API Routes

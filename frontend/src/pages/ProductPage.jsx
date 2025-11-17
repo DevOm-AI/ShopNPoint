@@ -132,7 +132,7 @@ const ProductPage = () => {
             <div className="bg-slate-100 rounded-2xl 
               flex items-center justify-center relative overflow-hidden border-2 border-slate-200">
               <img 
-                src={product.image_url}
+                src={`http://localhost:5000${product.image_url}`}
                 alt={product.name}
                 className="w-full h-auto object-contain p-4"
               />
