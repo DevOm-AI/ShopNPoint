@@ -129,19 +129,14 @@ const ProductPage = () => {
           
           {/* Image Gallery Column (Minimalist) */}
           <div className="space-y-4 sticky top-28">
-            <div className="bg-slate-100 rounded-2xl aspect-square 
-                          flex items-center justify-center relative overflow-hidden border-2 border-slate-200">
-              <ProductIcon className="w-48 h-48 text-slate-300 relative z-10" />
+            <div className="bg-slate-100 rounded-2xl 
+              flex items-center justify-center relative overflow-hidden border-2 border-slate-200">
+              <img 
+                src={product.image_url}
+                alt={product.name}
+                className="w-full h-auto object-contain p-4"
+              />
             </div>
-            {/* <div className="grid grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className={`bg-white border-2 rounded-xl aspect-square 
-                                       flex items-center justify-center cursor-pointer 
-                                       transition-all ${i === 0 ? 'border-blue-500 shadow-sm' : 'border-slate-200 hover:border-blue-300'}`}>
-                  <ProductIcon className="w-12 h-12 text-slate-300" />
-                </div>
-              ))}
-            </div> */}
           </div>
 
           {/* Product Details Column (Minimalist) */}
@@ -303,7 +298,6 @@ const ProductPage = () => {
               </div>
             </div>
           </div>
-
         </div>
       </main>
     </div>

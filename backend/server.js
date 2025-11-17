@@ -8,6 +8,8 @@ const adminRoutes = require('./routes/adminRoutes');
 
 const orderRoutes = require('./routes/orderRoutes');
 
+const path = require('path');
+
 
 
 dotenv.config();
@@ -37,7 +39,8 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+// make the public folder static
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // API Routes
