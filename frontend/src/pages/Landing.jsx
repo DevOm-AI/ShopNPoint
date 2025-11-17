@@ -51,11 +51,13 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        <div className="aspect-square bg-slate-50
-                      flex items-center justify-center relative overflow-hidden group-hover:from-blue-50 
-                      transition-all duration-300">
-          <product.icon className="w-20 h-20 text-slate-300 group-hover:text-blue-400 
-                                 group-hover:scale-110 transition-all duration-300 relative z-10" />
+        <div className="aspect-square bg-white flex items-center justify-center 
+              relative overflow-hidden border-b">
+          <img
+            src={`http://localhost:5000${product.image_url}`}
+            alt={product.name}
+            className="w-full h-full object-contain p-4"
+          />
         </div>
 
         <div className="p-5 flex flex-col flex-grow">
