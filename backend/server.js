@@ -25,7 +25,6 @@ const app = express();
 
 
 // Configure CORS to explicitly allow requests from your frontend's origin
-// Replace 'http://localhost:5173' with the actual URL of your frontend if different
 app.use(cors({
   origin: 'http://localhost:5173', // Your frontend's URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
@@ -38,6 +37,9 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: false }));
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 // API Routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
@@ -49,9 +51,6 @@ app.use('/api/admin', adminRoutes);
 // Custom Error Handling Middleware
 app.use(notFound);
 app.use(errorHandler);
-
-
-
 
 const PORT = process.env.PORT || 5000;
 
