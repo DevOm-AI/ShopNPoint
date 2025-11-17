@@ -40,6 +40,8 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
             <h3 className="text-lg font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">
               {item.name}
             </h3>
+            {/* <p className="text-sm text-slate-500">{item.category}</p> */}
+
             <button 
               onClick={() => onRemove(item.id)} 
               className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 
@@ -48,6 +50,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
               <Trash2 className="w-5 h-5" />
             </button>
           </div>
+
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <button 
@@ -72,12 +75,18 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
               </button>
             </div>
             <div className="text-right">
-              {/* Smaller, lighter font. Fixed currency symbol. */}
               <p className="text-lg font-semibold text-slate-900">
                 ₹{(item.price * item.quantity).toLocaleString()}
               </p>
               <p className="text-sm text-slate-500">
                 ₹{item.price.toLocaleString()} each
+              </p>
+              <p className="text-sm text-slate-400 line-through">
+                MRP: ₹{(item.price * 1.5).toFixed(2)}
+              </p>
+
+              <p className="text-sm text-green-600 font-medium">
+                You save: ₹{((item.price * 1.5) - item.price).toFixed(2)}
               </p>
             </div>
           </div>
