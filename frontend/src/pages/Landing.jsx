@@ -18,8 +18,10 @@ const CategoryCard = ({ category }) => {
     <Link to={`/category/${name}`} className="block group">
       {/* Softer hover shadow */}
       <div className="bg-white border-2 border-slate-100 rounded-2xl p-6 
-                    transition-all duration-300 hover:shadow-md hover:-translate-y-1 
-                    hover:border-blue-200 text-center">
+                transition-all duration-300 hover:shadow-lg hover:-translate-y-2 
+                hover:border-blue-300 hover:scale-[1.02]">
+
+
         <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-4
                       group-hover:bg-blue-100 transition-all">
           <Icon className="w-8 h-8 text-blue-600" />
@@ -39,8 +41,14 @@ const ProductCard = ({ product }) => {
   return (
     <Link to={`/product/${product.id}`} className="block group h-full">
       <div className="bg-white border-2 border-slate-100 rounded-2xl overflow-hidden 
-                    transition-all duration-300 hover:shadow-md hover:-translate-y-1 
-                    hover:border-blue-200 relative h-full flex flex-col">
+                transition-all duration-300 hover:shadow-md hover:-translate-y-1 
+                hover:border-blue-200 relative h-full flex flex-col">
+
+        {/* ✨ SHINE EFFECT HERE ✨ */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                        opacity-0 group-hover:opacity-100 pointer-events-none 
+                        transition-opacity duration-700"></div>
+
         
         {product.isNew && (
           <div className="absolute top-4 left-4 z-10 bg-blue-600 
@@ -56,7 +64,8 @@ const ProductCard = ({ product }) => {
           <img
             src={`http://localhost:5000${product.image_url}`}
             alt={product.name}
-            className="w-full h-full object-contain p-4"
+            className="w-full h-full object-contain p-4 
+             transition-transform duration-500 group-hover:scale-105"
           />
         </div>
 
@@ -100,6 +109,7 @@ const ProductCard = ({ product }) => {
             <span>View Details</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </div>
+          
         </div>
       </div>
     </Link>
@@ -310,11 +320,9 @@ const LandingPage = () => {
                 }`}
               >
                 {/* Text slides in from the left */}
-                <div
-                  className={`text-slate-900 space-y-5 transform transition-all duration-700 ease-out ${
-                    slide.align === "right" ? "md:text-right" : "text-left"
-                  } ${isActive ? 'opacity-100 translate-x-0 delay-200' : 'opacity-0 -translate-x-10'}`}
-                >
+                <div className={`text-slate-900 space-y-5 transform transition-all duration-700 ease-out 
+                 ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'}`}>
+
                   <h2 className="text-4xl font-semibold leading-tight">
                     {slide.title}
                   </h2>
@@ -342,7 +350,9 @@ const LandingPage = () => {
                   />
                   {/* --- NEW: Main Icon (Larger) --- */}
                   <slide.icon 
-                    className={`relative w-64 h-64 ${slide.iconColor} opacity-90 rotate-6 transform-gpu`} 
+                    className={`relative w-64 h-64 ${slide.iconColor} opacity-90 rotate-6 
+                                transition-transform duration-700 ease-out 
+                                ${isActive ? 'translate-y-0' : 'translate-y-4'}`}
                   />
 
                 </div>
@@ -425,7 +435,7 @@ const LandingPage = () => {
       </section>
 
       {/* Featured Products */}
-      <section>
+      <section className="pb=14">
         <div className="text-center mb-12">
            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
             <TrendingUp className="w-4 h-4" />
@@ -439,11 +449,45 @@ const LandingPage = () => {
             </span>
           </h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        {/* //// */}
+
+        {/* --- Featured Product Auto Slider --- */}
+        <div
+          className="flex overflow-x-auto space-x-6 pb-14 snap-x snap-mandatory scrollbar-none"
+          style={{
+            scrollBehavior: "smooth",
+            WebkitOverflowScrolling: "touch",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.dataset.pause = "true")}
+          onMouseLeave={(e) => (e.currentTarget.dataset.pause = "false")}
+          ref={(el) => {
+            if (!el) return;
+            let scrollPos = 0;
+
+            const autoScroll = () => {
+              if (el.dataset.pause === "true") return;
+              scrollPos += 1;
+              el.scrollTo({ left: scrollPos });
+              if (scrollPos >= el.scrollWidth) scrollPos = 0;
+              requestAnimationFrame(autoScroll);
+            };
+
+            requestAnimationFrame(autoScroll);
+          }}
+        >
           {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <div
+              key={product.id}
+              className="snap-start flex-shrink-0 w-60"
+            >
+              <ProductCard product={product} />
+            </div>
           ))}
         </div>
+
+
+        
       </section>
 
       {/* Highlights (Minimalist) */}
