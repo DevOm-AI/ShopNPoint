@@ -14,7 +14,8 @@ const getUserCart = asyncHandler(async (req, res) => {
       ci.quantity, 
       p.product_id, 
       p.name, 
-      p.rate 
+      p.rate ,
+      p.image_url 
     FROM cart_items ci
     JOIN carts c ON ci.cart_id = c.cart_id
     JOIN products p ON ci.product_id = p.product_id

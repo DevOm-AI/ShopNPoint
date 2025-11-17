@@ -25,13 +25,13 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
     <div className="bg-white border-2 border-slate-100 rounded-2xl p-4 
                   transition-all duration-300 hover:shadow-md hover:border-blue-200 
                   group">
-      <div className="flex items-start space-x-4">
-        <div className="w-20 h-20 bg-gradient-to-br from-slate-50 to-slate-100 
-                      rounded-xl flex items-center justify-center flex-shrink-0 
-                      group-hover:from-blue-50 group-hover:to-indigo-50 
-                      transition-all duration-300">
-          {/* Using Gift icon as placeholder, this is fine */}
-          <Gift className="w-8 h-8 text-blue-400 group-hover:text-blue-500 transition-colors" />
+        <div className="flex items-start space-x-4">
+          <div className="w-20 h-20 rounded-xl overflow-hidden border">
+            <img
+              src={`http://localhost:5000${item.image_url}`}
+              alt={item.name}
+              className="w-full h-full object-contain bg-white"
+            />
         </div>
         
         <div className="flex-1">
