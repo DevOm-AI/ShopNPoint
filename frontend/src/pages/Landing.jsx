@@ -132,11 +132,11 @@ const LandingPage = () => {
   const dropdownRef = useRef(null);
 
   const categories = [
-    { id: 1, name: 'Clothing', icon: Shirt, itemCount: '5+' },
-    { id: 2, name: 'Electronics', icon: Laptop, itemCount: '5+' },
-    { id: 3, name: 'Jewellery', icon: Gem, itemCount: '5+' },
-    { id: 4, name: 'Home Appliances', icon: HomeIcon, itemCount: '5+' },
-    { id: 5, name: 'Footwear', icon: ShoppingBag, itemCount: '5+' }
+    { id: 1, name: 'Clothing', icon: Shirt },
+    { id: 2, name: 'Electronics', icon: Laptop },
+    { id: 3, name: 'Jewellery', icon: Gem },
+    { id: 4, name: 'Home Appliances', icon: HomeIcon },
+    { id: 5, name: 'Footwear', icon: ShoppingBag }
   ];
 
   const bannerSlides = [
