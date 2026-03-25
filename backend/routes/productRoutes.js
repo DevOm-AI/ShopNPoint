@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-// --- THIS IS THE FIX ---
 // We need to import the new getFeaturedProducts function from the controller.
 const { 
   getProductsByCategory, 
   getProductById,
   getFeaturedProducts,
-  searchProducts
+  searchProducts,
+  getRecommendations
 } = require('../controllers/productController');
 
 // It's good practice to place more specific text-based routes
@@ -20,5 +20,10 @@ router.get('/category/:categoryName', getProductsByCategory);
 router.get('/search', searchProducts);
 
 router.get('/:id', getProductById);
+
+// --- THIS IS THE NEW ROUTE FOR RECOMMENDATIONS ---
+// We will add a new route to get product recommendations based on a product ID.
+// This route will call the getRecommendations function in the controller, which we will implement next.
+router.get('/:id/recommendations', getRecommendations);
 
 module.exports = router;

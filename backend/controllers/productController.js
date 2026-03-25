@@ -86,9 +86,27 @@ const getFeaturedProducts = asyncHandler(async (req, res) => {
   }
 });
 
+
+// recommendation link
+
+const axios = require('axios');
+
+const getRecommendations = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const mlResponse = await axios.get(`http://localhost:8000/recommend/${id}`);
+  const recIds = mlResponse.data.recommended_product_ids;
+
+  const query = `SELECT * FROM products WHERE product_id IN (${recIds.join(',')})`;
+  const recommendations = await executeQuery(query);
+  res.json(recommendations);
+});
+
+
+
 module.exports = {
   getProductsByCategory,
   getProductById,
   getFeaturedProducts,
   searchProducts,
+  getRecommendations
 };
