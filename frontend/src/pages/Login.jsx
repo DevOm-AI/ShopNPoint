@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, User, Lock, ShoppingCart, LogIn, ArrowRight, Shield, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
 
 const LoginPage = () => {
-  // --- (All state and logic is unchanged) ---
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -53,11 +52,9 @@ const LoginPage = () => {
 
         localStorage.setItem('userInfo', JSON.stringify(data));
         
-        // This logic seems to reference a /profile route we haven't built
-        // but the logic itself is fine.
         if (!data.profileCompleted) {
           alert(`Welcome, ${data.username}! Please complete your profile.`);
-          navigate('/profile'); // Changed from /profile to /dashboard
+          navigate('/profile');
         } else {
           alert(`Login successful! Welcome back, ${data.username}!`);
           navigate('/landing');
@@ -81,91 +78,68 @@ const LoginPage = () => {
   if (!mounted) return null;
 
   return (
-    // --- MODIFIED: Simplified background ---
-    <div className="min-h-screen bg-slate-50 flex">
-      
-      {/* --- REMOVED: Animated Background Elements --- */}
-
-      {/* Left Side - Branding (Minimalist) */}
-      <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center p-12 border-r border-slate-200">
-        <div className="relative z-10 max-w-md">
-          {/* --- MODIFIED: Solid icon background --- */}
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-8 shadow-md">
-            <ShoppingCart className="w-8 h-8 text-white" />
+    <div className="min-h-screen bg-gray-50 flex">
+      <div className="hidden lg:flex lg:w-1/2 bg-white border-r border-gray-200 items-center justify-center p-12">
+        <div className="max-w-md w-full">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-xl mb-8 shadow-sm">
+            <ShoppingCart className="w-7 h-7 text-white" strokeWidth={2} />
           </div>
           
-          {/* --- MODIFIED: Lighter, smaller font, no gradient --- */}
-          <h1 className="text-3xl font-semibold text-slate-900 mb-6 leading-tight">
-            Welcome Back to<br />
-            <span className="text-blue-600">
-              SnP Store
-            </span>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">
+            Welcome to <span className="text-blue-600">ShopNPoint</span>
           </h1>
           
-          <p className="text-lg text-slate-600 mb-12 leading-relaxed">
-            Your premium e-commerce destination. Sign in to continue your shopping journey.
+          <p className="text-lg text-gray-600 mb-12 leading-relaxed">
+            Sign in to access your account and continue shopping
           </p>
 
-          {/* Feature List (Already minimalist) */}
           <div className="space-y-4">
             {[
-              'Secure authentication',
-              'Personalized experience',
-              'Track your orders'
+              { text: 'Secure authentication', icon: CheckCircle2 },
+              { text: 'Personalized experience', icon: CheckCircle2 },
+              { text: 'Track your orders', icon: CheckCircle2 }
             ].map((feature, index) => (
-              <div 
-                key={index}
-                className="flex items-center gap-3"
-              >
-                <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="w-4 h-4 text-blue-600" />
+              <div key={index} className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <feature.icon className="w-3 h-3 text-emerald-600" strokeWidth={2.5} />
                 </div>
-                <span className="text-slate-700">{feature}</span>
+                <span className="text-gray-700 text-sm font-medium">{feature.text}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Right Side - Form */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 relative z-10">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:p-12">
         <div className="w-full max-w-md">
-          {/* Mobile Logo (Minimalist) */}
           <div className="lg:hidden flex justify-center mb-8">
-            {/* --- MODIFIED: Solid icon background --- */}
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-xl shadow-md">
-              <ShoppingCart className="w-7 h-7 text-white" />
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-600 rounded-xl shadow-sm">
+              <ShoppingCart className="w-6 h-6 text-white" strokeWidth={2} />
             </div>
           </div>
 
-          {/* Form Card (Minimalist) */}
-          {/* --- MODIFIED: Removed glassmorphism, added standard card style --- */}
-          <div className="bg-white rounded-2xl shadow-md p-8 sm:p-10 border border-slate-200">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-10">
             <div className="mb-8">
-              {/* --- MODIFIED: Lighter, smaller font --- */}
-              <h2 className="text-2xl font-semibold text-slate-900 mb-2">Sign In</h2>
-              <p className="text-slate-600">Enter your credentials to continue</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Sign In</h2>
+              <p className="text-gray-600 text-sm">Enter your credentials to access your account</p>
             </div>
 
-            {/* --- (Error styles are fine) --- */}
             {errors.api && (
-              <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-start gap-2">
-                <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <span className="text-xs">!</span>
-                </div>
-                <span>{errors.api}</span>
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+                <p className="text-sm text-red-700 font-medium">{errors.api}</p>
               </div>
             )}
 
-            <div className="space-y-5">
-              {/* --- (Input fields are already in the minimalist style) --- */}
-              <div className="group">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
                   Username
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <User className={`w-5 h-5 transition-colors ${focusedField === 'username' ? 'text-blue-600' : 'text-slate-400'}`} />
+                    <User className={`w-5 h-5 transition-colors duration-200 ${
+                      focusedField === 'username' ? 'text-blue-600' : 'text-gray-400'
+                    }`} strokeWidth={2} />
                   </div>
                   <input
                     type="text"
@@ -176,20 +150,30 @@ const LoginPage = () => {
                     onBlur={() => setFocusedField('')}
                     onKeyPress={handleKeyPress}
                     placeholder="Enter your username"
-                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 
-                              focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-200"
+                    className={`w-full pl-12 pr-4 py-3 bg-white border-2 rounded-xl text-gray-900 placeholder-gray-400 
+                              focus:outline-none transition-all duration-200 ${
+                                errors.username 
+                                  ? 'border-red-300 focus:border-red-500' 
+                                  : focusedField === 'username'
+                                    ? 'border-blue-600'
+                                    : 'border-gray-200 focus:border-blue-600'
+                              }`}
                   />
                 </div>
-                {errors.username && <p className="mt-2 text-sm text-red-600">{errors.username}</p>}
+                {errors.username && (
+                  <p className="mt-2 text-sm text-red-600 font-medium">{errors.username}</p>
+                )}
               </div>
 
-              <div className="group">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
                   Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className={`w-5 h-5 transition-colors ${focusedField === 'password' ? 'text-blue-600' : 'text-slate-400'}`} />
+                    <Lock className={`w-5 h-5 transition-colors duration-200 ${
+                      focusedField === 'password' ? 'text-blue-600' : 'text-gray-400'
+                    }`} strokeWidth={2} />
                   </div>
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -200,60 +184,68 @@ const LoginPage = () => {
                     onBlur={() => setFocusedField('')}
                     onKeyPress={handleKeyPress}
                     placeholder="Enter your password"
-                    className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 
-                              focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-200"
+                    className={`w-full pl-12 pr-12 py-3 bg-white border-2 rounded-xl text-gray-900 placeholder-gray-400 
+                              focus:outline-none transition-all duration-200 ${
+                                errors.password 
+                                  ? 'border-red-300 focus:border-red-500' 
+                                  : focusedField === 'password'
+                                    ? 'border-blue-600'
+                                    : 'border-gray-200 focus:border-blue-600'
+                              }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" strokeWidth={2} />
+                    ) : (
+                      <Eye className="w-5 h-5" strokeWidth={2} />
+                    )}
                   </button>
                 </div>
-                {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
+                {errors.password && (
+                  <p className="mt-2 text-sm text-red-600 font-medium">{errors.password}</p>
+                )}
               </div>
 
-              {/* Submit Button (Minimalist) */}
               <button
                 onClick={handleSubmit}
                 disabled={isLoading}
-                // --- MODIFIED: Removed gradient, softer shadow ---
-                className="w-full mt-6 bg-blue-600 hover:bg-blue-700
-                          text-white font-semibold py-4 px-6 rounded-xl shadow-md hover:shadow-lg 
-                          transform hover:-translate-y-0.5 transition-all duration-200 
-                          disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
+                className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 px-6 rounded-xl 
+                          shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200 
+                          disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:bg-blue-600
                           flex items-center justify-center gap-2 group"
               >
                 {isLoading ? (
-                  <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
-                    <LogIn className="w-5 h-5" />
+                    <LogIn className="w-5 h-5" strokeWidth={2} />
                     <span>Sign In</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" strokeWidth={2} />
                   </>
                 )}
               </button>
             </div>
 
-            {/* Footer Links (Already good) */}
-            <div className="mt-8 pt-6 border-t border-slate-200">
-              <div className="text-center space-y-3">
-                <p className="text-slate-600 text-sm">
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="text-center space-y-4">
+                <p className="text-gray-600 text-sm">
                   Don't have an account?{' '}
                   <Link 
                     to="/register" 
-                    className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                    className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200"
                   >
                     Create one
                   </Link>
                 </p>
-                <div className="flex items-center justify-center gap-2 text-sm">
-                  <Shield className="w-4 h-4 text-slate-400" />
+                <div className="flex items-center justify-center gap-2">
+                  <Shield className="w-4 h-4 text-gray-400" strokeWidth={2} />
                   <Link 
                     to="/admin/login" 
-                    className="text-slate-600 hover:text-blue-600 transition-colors"
+                    className="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium"
                   >
                     Admin Portal
                   </Link>
@@ -263,8 +255,8 @@ const LoginPage = () => {
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-xs text-slate-500">
-              Protected by 256-bit SSL encryption
+            <p className="text-xs text-gray-500">
+              Protected by industry-standard encryption
             </p>
           </div>
         </div>
