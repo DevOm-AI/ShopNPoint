@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const { executeQuery, executeTransaction } = require('../config/db'); // Ensure executeTransaction is imported
 const { generateAccessToken } = require('../utils/generateToken');
 const { encrypt, decrypt } = require('../models/aesEncrypt'); 
+const { addXP } = require('../utils/gamification');
 
 // @desc    Register a new user
 const registerUser = asyncHandler(async (req, res) => {
@@ -36,6 +37,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const newUserId = insertResult.insertId;
   if (newUserId) {
+    // Initialize Gamification Stats
+    await executeQuery("INSERT INTO user_gamification (user_id) VALUES (?)", [result.insertId]);
+
     // ... (Promo code logic remains the same) ...
     const promoCodeString = `${username.toUpperCase()}${Math.floor(100 + Math.random() * 900)}`;
     await executeQuery('UPDATE users SET promo_code = ? WHERE user_id = ?', [promoCodeString, newUserId]);
@@ -52,6 +56,31 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+
+// --- GAMIFICATION: STREAK LOGIC ---
+const updateStreak = async (userId) => {
+    const today = new Date().toISOString().split('T')[0];
+    try {
+        const rows = await executeQuery("SELECT last_login_date, current_streak FROM user_gamification WHERE user_id = ?", [userId]);
+        const stats = rows[0];
+        if (!stats) return;
+
+        if (!stats.last_login_date) {
+            await executeQuery("UPDATE user_gamification SET current_streak = 1, last_login_date = ? WHERE user_id = ?", [today, userId]);
+        } else {
+            const lastDate = new Date(stats.last_login_date);
+            const diffDays = Math.ceil(Math.abs(new Date(today) - lastDate) / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 1) {
+                await executeQuery("UPDATE user_gamification SET current_streak = current_streak + 1, last_login_date = ? WHERE user_id = ?", [today, userId]);
+            } else if (diffDays > 1) {
+                await executeQuery("UPDATE user_gamification SET current_streak = 1, last_login_date = ? WHERE user_id = ?", [today, userId]);
+            }
+        }
+    } catch (e) { console.error("Streak Error:", e); }
+};
+
+
 // @desc    Authenticate user & get token (Login)
 // ... (loginUser function remains the same, no changes needed) ...
 const loginUser = asyncHandler(async (req, res) => {
@@ -65,6 +94,10 @@ const loginUser = asyncHandler(async (req, res) => {
         if (passwordMatches) {
             const token = generateAccessToken(user.user_id);
             const profileCompleted = !!(user.age && user.gender && user.city);
+
+            // --- GAMIFICATION TRIGGERS ---
+            await updateStreak(user.user_id);
+            await addXP(user.user_id, 'DAILY_LOGIN');
 
             res.json({
                 user_id: user.user_id,

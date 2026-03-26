@@ -11,7 +11,6 @@ const orderRoutes = require('./routes/orderRoutes');
 const path = require('path');
 
 
-
 dotenv.config();
 
 const cors = require('cors');
@@ -21,7 +20,7 @@ const userRoutes = require('./routes/userRoutes');
 
 // Test the database connection
 // This will now work because dotenv.config() has already run.
-testConnection();
+// testConnection();
 
 const app = express();
 
@@ -49,6 +48,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
+
+app.use('/api/gamification', require('./routes/gamificationRoutes'));
 
 app.use('/api/admin', adminRoutes);
 

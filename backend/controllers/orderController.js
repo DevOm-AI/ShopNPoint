@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const { executeQuery } = require('../config/db');
+const { addXP } = require('../utils/gamification');
 
 // @desc    Get logged in user's orders
 // @route   GET /api/orders/myorders
@@ -122,6 +123,8 @@ const createOrderFromCart = asyncHandler(async (req, res) => {
     // 6. CLEAR THE CART
     await executeQuery('DELETE FROM cart_items WHERE cart_id = ?', [cart.cart_id]);
     await executeQuery('UPDATE carts SET total_amount = 0 WHERE cart_id = ?', [cart.cart_id]);
+
+    await addXP(req.user.user_id, 'PURCHASE');
 
     res.status(201).json({ message: 'Order created successfully!' });
 });

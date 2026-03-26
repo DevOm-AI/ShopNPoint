@@ -1,7 +1,7 @@
 // frontend/src/components/Header.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, ShoppingCart, Coins, User, Menu, X, Settings, Package, LogOut, ChevronDown, Sparkles } from 'lucide-react';
+import { Search, ShoppingCart, Coins, User, Menu, X, Settings, Package, LogOut, ChevronDown, Sparkles, Trophy } from 'lucide-react';
 import axios from 'axios';
 import Logo from './Logo';
 
@@ -122,6 +122,11 @@ const Header = () => {
                   <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <span className="text-sm hidden sm:block">Tokens</span>
+              </Link>
+
+              <Link to="/gamification" className="flex items-center gap-2 text-slate-600 hover:text-blue-600 font-bold transition-colors">
+                <Trophy size={18} />
+                <span>My Rank</span>
               </Link>
 
               <Link 
