@@ -1,108 +1,32 @@
-# 🛍️ ShopNPoint — Smart E-Commerce Platform with ML-Driven Token Rewards  
+# ShopNPoint: High-Engagement E-Commerce Ecosystem
 
-### 🚀 Intelligent • Secure • Rewarding
+**ShopNPoint** is a high-performance e-commerce platform engineered to solve user retention challenges through a sophisticated **Gamification Engine** and an **AI-driven Recommendation System**. 
 
----
+## 🚀 Key Features
 
-## 🧩 Overview
-**ShopNPoint** is a next-generation **e-commerce platform** that combines real-time shopping with a **machine-learning-based reward system**.  
-Users earn **tokens** whenever someone purchases through their promo code — and can **redeem these tokens** for percentage-based discounts on future purchases.  
+### 1. Gamification Engine
+* **Quadratic Leveling**: Uses $Level = \lfloor \sqrt{XP/100} \rfloor + 1$ to ensure balanced progression.
+* **Event-Driven Missions**: Reactive backend that awards XP and Tokens based on user triggers.
+* **Badge System**: Achievement tracking with automated threshold validation.
 
-Our platform ensures **data security, token fairness, and fraud prevention** using AES encryption, SHA-256 hashing, and anomaly-detection ML models.
+### 2. Recommendation Logic
+* **Collaborative Filtering**: Suggests products based on user behavioral patterns.
+* **Personalized Storefront**: Reduces user friction and increases conversion rates.
 
----
+### 3. Referral Network
+* **Secure Referrals**: Unique code tracking with automated reward injection for both parties.
 
-## 🌟 Key Highlights
+## 🛠️ Technical Stack
+* **Frontend**: React.js, Tailwind CSS, Framer Motion
+* **Backend**: Node.js, Express.js, JWT Authentication
+* **Database**: MySQL with Promise-based Connection Pooling
 
-| Feature | Description |
-|----------|--------------|
-| 🔐 **End-to-End Encrypted Promo Codes** | Promo codes are secured using **AES** and **SHA-256** to prevent tampering. |
-| 🧠 **ML-Based Fraud Detection** | Uses **Isolation Forest**, **One-Class SVM**, and **Autoencoder** models to detect fake or abnormal token activity. |
-| 💰 **Dynamic Token Reward System** | Code owners earn **15% of tokens** from referred purchases — dynamically calculated & updated in real-time. |
-| 🧾 **Modern E-Commerce Core** | Built with **React + Vite** frontend and **Node.js + Express** backend. |
-| ⚙️ **Flask ML Microservice** | Python service dedicated to fraud detection and dynamic reward validation. |
-| 🪙 **Real-Time Token Management** | Tokens update instantly after each purchase — securely reflected in user dashboards. |
-
----
-
-## 🏗️ System Architecture
-
- "Will be uploaded soon...!"
-
+## 🏗️ Getting Started
+1. Clone the repo.
+2. Install dependencies: `npm install`.
+3. Set up your `.env` file with database credentials.
+4. Run the SQL schema to initialize missions and badges.
+5. Start servers: `npm run dev` (backend) and `npm start` (frontend).
 
 ---
-## 🧠 Machine Learning Module
-
-Language: Python
-Framework: Flask API
-
-Model	Purpose
-🧩 Isolation Forest	Detects abnormal token-earning patterns
-🕵️ One-Class SVM	Flags suspicious user activity or fake referrals
-🧬 Autoencoder	Learns normal transaction patterns to find anomalies
-
-
-📂 Structure
-
-ml_service/
-├── app.py                     # Flask API
-├── models/                    # Trained ML Models
-│   ├── isolation_forest.pkl
-│   ├── oneclass_svm.pkl
-│   └── autoencoder_model.h5
-├── training/
-│   ├── train_iforest.py
-│   ├── train_ocsvm.py
-│   └── train_autoencoder.py
-└── utils/
-    ├── preprocess.py
-    └── feature_extract.py
-
-
-
-💡 Token Flow Example
-
-User X registers → Promo code auto-generated → Encrypted (AES) + Hashed (SHA-256).
-
-User Y uses X’s promo code during checkout.
-
-System validates hash → Confirms promo authenticity.
-
-ML service analyzes token earning behavior.
-
-If normal → X earns 15% tokens of Y’s purchase amount.
-
-Tokens instantly update in both user dashboards.
-
-
-
-
-⚙️ Tech Stack
-Layer	Technology
-🌐 Frontend	React.js + Vite + Tailwind CSS
-🧩 Backend	Node.js + Express
-🗄️ Database	MySQL
-🔬 ML Microservice	Python + Flask + Scikit-Learn + TensorFlow
-🔐 Security	AES-256 Encryption + SHA-256 Hashing
-💳 Payment	Integrated Gateway (Test Mode)
-
-
-# 1️⃣ Clone the repository
-git clone https://github.com/DevOm-AI/ShopNPoint.git
-cd ShopNPoint
-
-# 2️⃣ Install dependencies
-npm install
-
-# 3️⃣ Start frontend (Vite + React)
-npm run dev
-
-# 4️⃣ Start backend server
-cd backend
-npm install
-npm start
-
-# 5️⃣ Start ML Flask microservice
-cd ml_service
-pip install -r requirements.txt
-python app.py
+**Developed by Om Shete** *B.E. in Artificial Intelligence & Data Science*
